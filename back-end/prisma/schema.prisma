@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  farm                Farm         @relation(fields: [farmId], references: [id])
+  farmId              String       @db.ObjectId // Adicionado o campo farmId para a relação
+  name                String
+  function            Function     @relation(fields: [functionId], references: [id])
+  functionId          String       @db.ObjectId // Adicionado o campo functionId para a relação
+  master              Boolean
+  email               String       @unique
+  password            String
+  created_at          DateTime
+  status_active       Boolean
+}
+
+model Function {
+  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  function_name       String
+  created_at          DateTime
+  status_active       Boolean
+  users               User[]       // Adiciona a relação inversa
+}
+
+model Farm {
+  id                      String       @id @default(auto()) @map("_id") @db.ObjectId
+  registration_date       DateTime?
+  status                  Boolean
+  cnpj                    String       @unique
+  fantasy_name            String
+  social_reason           String?
+  cep                     String?
+  address                 String
+  number_address          String?
+  phone_number            String
+  //img_farm                
+  created_at              DateTime
+  status_active           Boolean
+  users                   User[]       // Adiciona a relação inversa
+}
+
+model Lot {
+  id                      String       @id @default(auto()) @map("_id") @db.ObjectId
+  lot_name                String
+  lot_type                String
+  description             String
+  created_at              DateTime
+  status_active           Boolean
+  animals                 Animal[]     // Adiciona a relação inversa
+}
+
+model Animal {
+  id                      String       @id @default(auto()) @map("_id") @db.ObjectId
+  earring                 String
+  name_animal             String
+  collar                  String
+  //img_animal
+  gender                  String
+  lotId                   String       @db.ObjectId // Adicionado o campo lotId para a relação
+  lot                     Lot          @relation(fields: [lotId], references: [id])
+  birthdate               DateTime
+  last_childbirth         DateTime?
+  pregnant                Boolean
+  animal_breed            String
+  name_father             String?
+  name_mother             String?
+  birth_weight            String
+  created_at              DateTime
+  status_active           Boolean
+  alerts                  Alert[]      // Adiciona a relação inversa
+}
+
+model Alert {
+  id                      String       @id @default(auto()) @map("_id") @db.ObjectId
+  animalId                String       @db.ObjectId // Adicionado o campo animalId para a relação
+  animal                  Animal       @relation(fields: [animalId], references: [id])
+  description             String
+  resolution              String?
+  resolution_date         DateTime?
+  created_at              DateTime
+  status_active           Boolean
+}
