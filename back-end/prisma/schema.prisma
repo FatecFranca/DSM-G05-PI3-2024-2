@@ -10,15 +10,16 @@ datasource db {
 model User {
   id                  String       @id @default(auto()) @map("_id") @db.ObjectId
   farm                Farm         @relation(fields: [farmId], references: [id])
-  farmId              String       @db.ObjectId // Adicionado o campo farmId para a relação
+  farmId              String       @db.ObjectId
   name                String
   function            Function     @relation(fields: [functionId], references: [id])
-  functionId          String       @db.ObjectId // Adicionado o campo functionId para a relação
+  functionId          String       @db.ObjectId
   master              Boolean
   email               String       @unique
   password            String
   created_at          DateTime
   status_active       Boolean
+  schedules           Schedule[]
 }
 
 model Function {
@@ -26,7 +27,7 @@ model Function {
   function_name       String
   created_at          DateTime
   status_active       Boolean
-  users               User[]       // Adiciona a relação inversa
+  users               User[]
 }
 
 model Farm {
@@ -40,10 +41,10 @@ model Farm {
   address                 String
   number_address          String?
   phone_number            String
-  //img_farm                
   created_at              DateTime
   status_active           Boolean
-  users                   User[]       // Adiciona a relação inversa
+  users                   User[]       
+  schedules               Schedule[]
 }
 
 model Lot {
@@ -53,7 +54,7 @@ model Lot {
   description             String
   created_at              DateTime
   status_active           Boolean
-  animals                 Animal[]     // Adiciona a relação inversa
+  animals                 Animal[] 
 }
 
 model Animal {
@@ -61,9 +62,8 @@ model Animal {
   earring                 String
   name_animal             String
   collar                  String
-  //img_animal
   gender                  String
-  lotId                   String       @db.ObjectId // Adicionado o campo lotId para a relação
+  lotId                   String       @db.ObjectId
   lot                     Lot          @relation(fields: [lotId], references: [id])
   birthdate               DateTime
   last_childbirth         DateTime?
@@ -74,16 +74,28 @@ model Animal {
   birth_weight            String
   created_at              DateTime
   status_active           Boolean
-  alerts                  Alert[]      // Adiciona a relação inversa
+  alerts                  Alert[]
 }
 
 model Alert {
   id                      String       @id @default(auto()) @map("_id") @db.ObjectId
-  animalId                String       @db.ObjectId // Adicionado o campo animalId para a relação
+  animalId                String       @db.ObjectId
   animal                  Animal       @relation(fields: [animalId], references: [id])
   description             String
   resolution              String?
   resolution_date         DateTime?
   created_at              DateTime
   status_active           Boolean
+}
+
+model Schedule {
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  description        String
+  date_scheduled     DateTime
+  userId             String     @db.ObjectId
+  user               User       @relation(fields: [userId], references: [id])
+  farmId             String     @db.ObjectId
+  farm               Farm       @relation(fields: [farmId], references: [id])
+  created_at         DateTime   @default(now())
+  status_active      Boolean
 }
