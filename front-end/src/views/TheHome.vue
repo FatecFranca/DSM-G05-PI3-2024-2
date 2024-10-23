@@ -1,28 +1,14 @@
 <template>
   <div>
-    
+    <h1>Bem-vindo à Home!</h1>
+    <p>Você fez login com sucesso.</p>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      value_email: ""
-    };
-  },
-  methods: {
-    getEmail() {
-      console.log(this.value_email);
-    }
-  }
+  name: 'TheHome',
 };
 </script>
 
-<style scoped>
-    div {
-        background-color: brown;
-        height: 100vh;
-        width: 100vw;
-    }
-</style>
+<style scoped></style>

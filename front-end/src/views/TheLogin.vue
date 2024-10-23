@@ -23,7 +23,9 @@
             </div>
 
             <div class="botao">
-              <button @click="validarLogin">Login</button>
+              <router-link to="/home">
+                <button @click="validarLogin">Login</button>
+              </router-link>
             </div>
 
             <div class="criaConta">
@@ -66,11 +68,12 @@
             </div>
 
             <div class="email">
-              <h4>Esqueceu sua senha? Não se preocupe! <br> Insira o seu endereço de e-mail abaixo <br>e enviaremos um link para redefinir sua senha. </h4>
+              <h4>Esqueceu sua senha? Não se preocupe! <br> Insira o seu endereço de e-mail abaixo <br>e enviaremos um
+                link para redefinir sua senha. </h4>
               <h3>Email</h3>
               <input type="email" v-model="email" placeholder="pecuariapro@123.com" class="input-email">
             </div>
-            
+
             <div class="botao">
               <button>Enviar</button>
             </div>
@@ -88,6 +91,7 @@
 
 <script>
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'TheLogin',
@@ -97,9 +101,16 @@ export default {
       email: "",
       senha: "",
       error: null,
-      view: 'LoginForm',  // Definindo qual formulário exibir
+      view: 'LoginForm',
     }
   },
+
+  setup() {
+    const router = useRouter();
+
+    return { router };
+  },
+
   mounted() {
     this.fetchUsers()
   },
@@ -120,10 +131,13 @@ export default {
 
       if (usuarioEncontrado) {
         console.log("Login bem-sucedido! Usuário:", usuarioEncontrado.name);
+        this.router.push('/home');
       } else {
         console.log("Email ou senha incorretos.");
       }
     },
+
+
 
     trocarParaCriarConta() {
       this.view = 'CriarContaForm';
@@ -140,6 +154,4 @@ export default {
 }
 </script>
 
-<style scoped>
-/* Adicione seus estilos aqui */
-</style>
+<style scoped></style>

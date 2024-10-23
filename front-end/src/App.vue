@@ -1,12 +1,27 @@
 <script setup>
-    import TheLogin from './views/TheLogin.vue';
+
 </script>
 
-
 <template>
-    <TheLogin />
+    <router-view />
 </template>
 
-
 <style scoped>
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+html,
+body,
+#app {
+    height: 100%;
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>
