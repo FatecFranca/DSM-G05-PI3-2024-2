@@ -2,7 +2,8 @@
   "name": "DSM-G05-PI3-2024-2",
   "version": "1.0.0",
   "scripts": {
-    "start": "concurrently \"npm run serve --prefix front-end\" \"npm run start --prefix back-end\""
+    "start": "concurrently \"npm run serve --prefix front-end\" \"npm run start --prefix back-end\"",
+    "atualizar": "npm install && (cd front-end && npm install) && (cd back-end && npm install)"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
