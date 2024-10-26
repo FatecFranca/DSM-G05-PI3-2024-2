@@ -1,6 +1,6 @@
 <template>
   <div class="w-screen h-screen flex">
-    <TheNavbar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
+    <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
 
     <!-- Main -->
     <div class="flex-1 h-full bg-gray-400">
