@@ -1,5 +1,6 @@
 import './assets/main.css'
 import VueTheMask from 'vue-the-mask';
+import 'font-awesome/css/font-awesome.css';
 
 
 import { createApp } from 'vue';
