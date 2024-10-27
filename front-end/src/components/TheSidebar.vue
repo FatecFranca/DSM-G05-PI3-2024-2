@@ -12,6 +12,18 @@
         <i class="fa fa-home fa-lg"></i>
         <span v-if="isSidebarVisible" class="ml-2">Home</span>
       </RouterLink>
+      <RouterLink to="/animais" class="flex items-center p-2 text-white w-full justify-center">
+        <i class="fa fa-wheelchair fa-lg" aria-hidden="true"></i>
+        <span v-if="isSidebarVisible" class="ml-2">Animais</span>
+      </RouterLink>
+      <RouterLink to="/fazenda" class="flex items-center p-2 text-white w-full justify-center">
+        <i class="fa fa-map" aria-hidden="true"></i>
+        <span v-if="isSidebarVisible" class="ml-2">Fazenda</span>
+      </RouterLink>
+      <RouterLink to="/informacoes" class="flex items-center p-2 text-white w-full justify-center">
+        <i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>
+        <span v-if="isSidebarVisible" class="ml-2">informações</span>
+      </RouterLink>
       <RouterLink to="/usuarios" class="flex items-center p-2 text-white w-full justify-center">
         <i class="fa fa-user fa-lg"></i>
         <span v-if="isSidebarVisible" class="ml-2">Usuários</span>
