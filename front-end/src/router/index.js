@@ -7,6 +7,7 @@ import TheFarm from '@/views/TheFarm.vue';
 import TheInfos from '@/views/TheInfos.vue';
 import TheUsers from '@/views/TheUsers.vue';
 
+
 const routes = [
   {
     path: '/',
@@ -42,7 +43,7 @@ const routes = [
     path: '/usuarios',
     name: 'Users',
     component: TheUsers,
-  }
+  },
 ];
 
 const router = createRouter({
