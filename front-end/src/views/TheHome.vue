@@ -122,8 +122,8 @@ export default {
   data() {
     return {
       isSidebarVisible: false,
-      nomeFazenda: "Fazenda Marechal",
       rangeValue: 30,
+      nomeFazenda: 'Fazenda Marechal',
     };
   },
   methods: {

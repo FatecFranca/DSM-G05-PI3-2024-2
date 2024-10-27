@@ -12,42 +12,67 @@ const routes = [
     path: '/',
     name: 'Login',
     component: TheLogin,
+    meta: {
+      title: 'AgroTech | Login'
+    }
   },
   {
     path: '/home',
     name: 'Home',
     component: TheHome,
+    meta: {
+      title: 'AgroTech | Home'
+    }
   },
   {
     path: '/animal',
     name: 'Animal',
     component: TheAnimal,
+    meta: {
+      title: 'AgroTech | Animal'
+    }
   },
   {
     path: '/animais',
     name: 'Animals',
     component: TheAnimals,
+    meta: {
+      title: 'AgroTech | Animais'
+    }
   },
   {
     path: '/fazenda',
     name: 'Farm',
     component: TheFarm,
+    meta: {
+      title: 'AgroTech | Fazenda'
+    }
   },
   {
     path: '/informacoes',
     name: 'Infos',
     component: TheInfos,
+    meta: {
+      title: 'AgroTech | Informações'
+    }
   },
   {
     path: '/usuarios',
     name: 'Users',
     component: TheUsers,
+    meta: {
+      title: 'AgroTech | Usuários'
+    }
   }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+router.beforeEach((to) => {
+  document.title = to.meta.title || 'AgroTech';
 });
 
 export default router;
