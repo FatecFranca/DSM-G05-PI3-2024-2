@@ -83,10 +83,24 @@
 </template>
 
 <script>
+import TheSidebar from '../components/TheSidebar.vue';
+
 export default {
     name: 'TheUsers',
+    components: {
+        TheSidebar,
+    },
+    data() {
+        return {
+            isSidebarVisible: true,
+        };
+    },
+    methods: {
+        toggleSidebar() {
+            this.isSidebarVisible = !this.isSidebarVisible;
+        },
+    },
 };
-
 </script>
 
 <style scoped></style>
