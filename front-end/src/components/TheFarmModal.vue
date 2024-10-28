@@ -11,12 +11,12 @@
             <form @submit.prevent class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Nome</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Nome *</label>
                         <input type="text" id="name" name="name" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
-                        <label for="cnpj" class="block text-sm font-medium text-gray-700">CNPJ</label>
+                        <label for="cnpj" class="block text-sm font-medium text-gray-700">CNPJ *</label>
                         <input type="text" id="cnpj" name="cnpj" v-mask="'##.###.###/####-##'" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
@@ -26,7 +26,7 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700">Endereço</label>
+                        <label for="address" class="block text-sm font-medium text-gray-700">Endereço *</label>
                         <input type="text" id="address" name="address" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
@@ -36,14 +36,15 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
-                        <label for="phone_number" class="block text-sm font-medium text-gray-700">Telefone</label>
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700">Telefone *</label>
                         <input type="tel" id="phone_number" name="phone_number" v-mask="'(##) #####-####'" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
-                    <div>
+                    <div class="flex items-center space-x-2">
                         <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <input type="checkbox" id="status" name="status" checked
-                            class="mt-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                        <input type="checkbox" id="status" name="status" v-model="isActive"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                        <span class="text-sm text-gray-700">{{ isActive ? 'Ativo' : 'Inativo' }}</span>
                     </div>
                     <div>
                         <label for="image" class="block text-sm font-medium text-gray-700">Imagem</label>
@@ -52,7 +53,7 @@
                     </div>
                     <div>
                         <label for="created_at" class="block text-sm font-medium text-gray-700">Data Cadastro</label>
-                        <input type="date" id="created_at" name="created_at" required
+                        <input type="date" id="created_at" name="created_at" required disabled
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div class="col-span-2">
@@ -71,6 +72,16 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            isActive: true
+        };
+    }
+};
+</script>
 
 <style scoped>
 @media (max-width: 768px) {
