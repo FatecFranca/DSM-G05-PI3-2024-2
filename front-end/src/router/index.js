@@ -7,6 +7,7 @@ import TheFarm from '@/views/TheFarm.vue';
 import TheInfos from '@/views/TheInfos.vue';
 import TheUsers from '@/views/TheUsers.vue';
 
+
 const routes = [
   {
     path: '/',
