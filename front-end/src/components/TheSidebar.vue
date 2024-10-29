@@ -7,7 +7,7 @@
     <div class="h-[85px] bg-gray-300 flex items-center justify-center w-full">
       <span v-if="isSidebarVisible">Menu</span>
     </div>
-    <div class="flex flex-col items-center mt-4 w-full">
+    <div class="flex-1 flex-col items-center mt-4 w-full">
       <RouterLink to="/home" class="flex items-center p-2 text-white w-full justify-center">
         <i class="fa fa-home fa-lg"></i>
         <span v-if="isSidebarVisible" class="ml-2">Home</span>
@@ -29,10 +29,23 @@
         <span v-if="isSidebarVisible" class="ml-2">Usuários</span>
       </RouterLink>
     </div>
+    <div class="flex justify-center items-center mb-16">
+      <img class="rounded-full h-10 mr-3" src="../assets/imgs/login.jpg" alt="" srcset="">
+      <div class="flex flex-col gap-1">
+        <span v-if="isSidebarVisible" class="ml-2 text-white">Olá, Habbiner</span>
+        <RouterLink to="/">
+          <span v-if="isSidebarVisible" class="ml-2 text-white cursor-pointer">
+            <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+            Logout
+          </span>
+        </RouterLink>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'TheSidebar',
   props: {
