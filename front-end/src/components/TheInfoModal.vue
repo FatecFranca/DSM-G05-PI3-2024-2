@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         submitForm() {
-            this.$emit('save-info', { ...this.info }); // Emite a informação para ser salva
+            this.$emit('save-info', { ...this.info });
         },
     },
 };

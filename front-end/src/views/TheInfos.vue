@@ -40,7 +40,7 @@
                     </div>
                     <select v-model="selectedAssunto"
                         class="border-l border-r border-gray-300 p-3 text-gray-800 cursor-pointer bg-white">
-                        <option value="" disabled selected>Escolha um Assunto</option>
+                        <option value="" disabled>Escolha um Assunto</option>
                         <option v-for="assunto in assuntos" :key="assunto" :value="assunto">{{ assunto }}</option>
                     </select>
                     <div class="border-l border-gray-300 p-3 flex items-center space-x-1 text-red-600 cursor-pointer"
@@ -74,7 +74,6 @@
                     </tbody>
                 </table>
             </div>
-
             <TheInfoModal :isOpen="isModalOpen" :info="infoToEdit" @save-info="saveInfo" @close="closeModal" />
         </div>
     </div>
@@ -99,88 +98,94 @@ export default {
                 categoria: '',
                 descricao: '',
                 data: '',
-                infos: [
-                    { id: 1, assunto: 'Manuseio de Amostras', categoria: 'Higiene', descricao: 'Equipamentos limpos e desinfetados', data: '2023-10-12' },
-                    { id: 2, assunto: 'Comportamento Animal', categoria: 'Manejo', descricao: 'Sinais de estresse nos animais', data: '2023-10-15' },
-                    { id: 3, assunto: 'Pós Medicação', categoria: 'Manejo', descricao: 'Monitorar resposta após medicamentos', data: '2023-10-20' },
-                    { id: 4, assunto: 'Vacinação', categoria: 'Saúde', descricao: 'Manejo antes e após vacinação', data: '2023-10-22' },
-                ],
-                assuntos: ['Manuseio de Amostras', 'Comportamento Animal', 'Pós Medicação', 'Vacinação'],
-                categorias: ['Higiene', 'Manejo', 'Saúde'],
-                showDropdown: {
-                    data: false,
-                    categoria: false,
-                },
-                selectedAssunto: '',
-                selectedCategoria: null,
-                selectedDateOrder: null,
+            },
+            infos: [
+                { id: 1, assunto: 'Manuseio de Amostras', categoria: 'Higiene', descricao: 'Equipamentos limpos e desinfetados', data: '2023-10-12' },
+                { id: 2, assunto: 'Comportamento Animal', categoria: 'Manejo', descricao: 'Sinais de estresse nos animais', data: '2023-10-15' },
+                { id: 3, assunto: 'Pós Medicação', categoria: 'Manejo', descricao: 'Monitorar resposta após medicamentos', data: '2023-10-20' },
+                { id: 4, assunto: 'Vacinação', categoria: 'Saúde', descricao: 'Manejo antes e após vacinação', data: '2023-10-22' },
+            ],
+            assuntos: ['Manuseio de Amostras', 'Comportamento Animal', 'Pós Medicação', 'Vacinação'],
+            categorias: ['Higiene', 'Manejo', 'Saúde'],
+            showDropdown: {
+                data: false,
+                categoria: false,
+            },
+            selectedAssunto: '',
+            selectedCategoria: null,
+            selectedDateOrder: null,
+        };
+    },
+    computed: {
+        filteredInfos() {
+            let filtered = [...this.infos];
+            if (this.selectedAssunto) {
+                filtered = filtered.filter(info => info.assunto === this.selectedAssunto);
+            }
+            if (this.selectedCategoria) {
+                filtered = filtered.filter(info => info.categoria === this.selectedCategoria);
+            }
+            if (this.selectedDateOrder === 'asc') {
+                filtered.sort((a, b) => new Date(a.data) - new Date(b.data));
+            } else if (this.selectedDateOrder === 'desc') {
+                filtered.sort((a, b) => new Date(b.data) - new Date(a.data));
+            }
+            return filtered;
+        },
+    },
+    methods: {
+        toggleSidebar() {
+            this.isSidebarVisible = !this.isSidebarVisible;
+        },
+        openModal() {
+            this.infoToEdit = {
+                assunto: '',
+                categoria: '',
+                descricao: '',
+                data: '',
+            };
+            this.isModalOpen = true;
+        },
+        closeModal() {
+            this.isModalOpen = false;
+            this.infoToEdit = {
+                assunto: '',
+                categoria: '',
+                descricao: '',
+                data: '',
             };
         },
-            computed: {
-            filteredInfos() {
-                let filtered = [...this.infos];
-                if (this.selectedAssunto) {
-                    filtered = filtered.filter(info => info.assunto === this.selectedAssunto);
-                }
-                if (this.selectedCategoria) {
-                    filtered = filtered.filter(info => info.categoria === this.selectedCategoria);
-                }
-                if (this.selectedDateOrder === 'asc') {
-                    filtered.sort((a, b) => new Date(a.data) - new Date(b.data));
-                } else if (this.selectedDateOrder === 'desc') {
-                    filtered.sort((a, b) => new Date(b.data) - new Date(a.data));
-                }
-                return filtered;
-            },
+        openInfoModal(info) {
+            this.infoToEdit = { ...info };
+            this.isModalOpen = true;
         },
-        methods: {
-            toggleSidebar() {
-                this.isSidebarVisible = !this.isSidebarVisible;
-            },
-            openModal() {
-                this.infoToEdit = {
-                    assunto: '',
-                    categoria: '',
-                    descricao: '',
-                    data: '',
-                };
-                this.isModalOpen = true;
-            },
-            closeModal() {
-                this.isModalOpen = false;
-                this.infoToEdit = null;
-            },
-            openInfoModal(info) {
-                this.infoToEdit = { ...info };
-                this.isModalOpen = true;
-            },
-            saveInfo(updatedInfo) {
-                if (updatedInfo.id) {
-                    const index = this.infos.findIndex(info => info.id === updatedInfo.id);
-                    if (index !== -1) {
-                        this.$set(this.infos, index, updatedInfo);
-                    }
-                } else {
-                    updatedInfo.id = this.infos.length + 1;
-                    this.infos.push(updatedInfo);
+        saveInfo(updatedInfo) {
+            if (updatedInfo.id) {
+                const index = this.infos.findIndex(info => info.id === updatedInfo.id);
+                if (index !== -1) {
+                    this.$set(this.infos, index, updatedInfo);
                 }
-                this.closeModal();
-            },
-            sortByDate(order) {
-                this.selectedDateOrder = order;
-                this.showDropdown.data = false;
-            },
-            filterByCategoria(categoria) {
-                this.selectedCategoria = categoria;
-                this.showDropdown.categoria = false;
-            },
-            clearFilters() {
-                this.selectedAssunto = '';
-                this.selectedCategoria = null;
-                this.selectedDateOrder = null;
-            },
+            } else {
+                updatedInfo.id = this.infos.length + 1;
+                this.infos.push(updatedInfo);
+            }
+            this.closeModal();
         },
-    };
+        sortByDate(order) {
+            this.selectedDateOrder = order;
+            this.showDropdown.data = false;
+        },
+        filterByCategoria(categoria) {
+            this.selectedCategoria = categoria;
+            this.showDropdown.categoria = false;
+        },
+        clearFilters() {
+            this.selectedAssunto = '';
+            this.selectedCategoria = null;
+            this.selectedDateOrder = null;
+        },
+    },
+};
 </script>
 
 <style scoped></style>
