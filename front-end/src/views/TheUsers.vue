@@ -1,167 +1,192 @@
 <template>
-    <div class="flex-grow-1 bg-[url('@/assets/imgs/BgColor.png')] flex h-screen bg-cover">
+    <div class="w-screen h-screen flex">
         <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
-        <i class="fa fa-bars fa-2x cursor-pointer p-2" aria-hidden="true" @click="toggleSidebar"></i>
-
-        <div class="flex-grow -ml-1">
-        <div class='h-56'> <!-- Div Superior -->
-            
-    <div class="justify-items-center mt-4">
-        <h class='text-[2.0rem] center noto-sans-400'>Usuários</h>
-        <hr class='w-[14rem] mt-2 -mb-3 border-black border-1.5'>
-        <p class='mt-6 noto-sans-300'>Selecione o que você deseja cadastrar ou atualizar</p>
-    </div>
-
-    <div class="flex mt-[4.17em] ml-[] font-bold items-center"> <!-- Div engloba Barra filtros e botao cadastrar -->
-        
-        <!-- Div Barra filtros -->
-        <div class="flex items-center rounded-lg bg-neutral-100 bg-opacity-40"> 
-
-            <!-- Icone Filtro -->
-            <div class="border rounded-l-lg w-16 h-[3.80rem] border-gray-300 flex justify-center items-center">
-                <img class="w-6 h-[1.57em]" src="../assets/imgs/filter.png" alt="logo">
+        <div class="flex-1 h-full bg-gray-100 flex flex-col">
+            <div class="flex items-center h-20 bg-white shadow relative">
+                <i class="fa fa-bars fa-lg cursor-pointer p-4" @click="toggleSidebar"></i>
+                <span class="text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">
+                    Cadastro - Usuários
+                </span>
             </div>
-
-            <!-- Filtro -->
-            <div class="border noto-sans-700 border-gray-300 w-28 h-[3.80rem] flex justify-center items-center">
-                <p class="text-[0.87em]">Filtro</p>
+            <div class="flex justify-between items-center p-4 bg-gray-50 shadow">
+                <div class="flex items-center bg-white rounded-lg border border-gray-300 shadow relative">
+                    <div class="border-r border-gray-300 p-3 flex items-center">
+                        <img class="w-5 h-5" src="../assets/imgs/filter.png" alt="Filtro" />
+                    </div>
+                    <div class="p-3 font-bold">
+                        <p class="text-sm">Filtro</p>
+                    </div>
+                    <div @mouseenter="showDropdown.data = true" @mouseleave="showDropdown.data = false"
+                        class="border-l border-r border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                        <p class="text-sm font-bold">Data</p>
+                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        <ul v-show="showDropdown.data"
+                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
+                            <li @click="sortByDate('asc')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Mais
+                                Antigo</li>
+                            <li @click="sortByDate('desc')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Mais Novo
+                            </li>
+                        </ul>
+                    </div>
+                    <div @mouseenter="showDropdown.ordenar = true" @mouseleave="showDropdown.ordenar = false"
+                        class="border-l border-r border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                        <p class="text-sm font-bold">Ordenar Por</p>
+                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        <ul v-show="showDropdown.ordenar"
+                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
+                            <li @click="sortByName" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Nome</li>
+                            <li @click="sortByRole" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Cargo</li>
+                        </ul>
+                    </div>
+                    <div @mouseenter="showDropdown.status = true" @mouseleave="showDropdown.status = false"
+                        class="border-l border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                        <p class="text-sm font-bold">Status</p>
+                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        <ul v-show="showDropdown.status"
+                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
+                            <li @click="filterByStatus('ativo')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                                Ativo</li>
+                            <li @click="filterByStatus('inativo')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                                Inativo</li>
+                        </ul>
+                    </div>
+                    <div class="border-l border-gray-300 p-3 flex items-center space-x-1 text-red-600 cursor-pointer"
+                        @click="clearFilters">
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                        <p class="text-sm font-bold">Limpar Filtro</p>
+                    </div>
+                </div>
+                <button @click="cadastrarUsuario" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700">
+                    + Cadastrar Usuário
+                </button>
             </div>
-
-            <!-- Data -->
-            <div class="border noto-sans-700 border-gray-300 w-32 h-[3.80rem] flex justify-center items-center">
-                <p class="text-[0.87em]">Data</p>
-                <img class="ml-8" src="../assets/imgs/arrow.png" alt="logo">
+            <div class="flex-1 overflow-y-auto p-4">
+                <table class="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="py-2 px-4 text-left text-gray-700">ID</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Usuário</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Cargo</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Data Cadastro</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Admin</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="usuario in filteredUsuarios" :key="usuario.id"
+                            class="hover:bg-gray-100 cursor-pointer" @click="abrirModal(usuario)">
+                            <td class="py-2 px-4 border-b">{{ usuario.id }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.nome }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.cargo }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.dataCadastro }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.admin }}</td>
+                            <td class="py-2 px-4 border-b">
+                                <span :class="usuario.status === 'ativo' ? 'text-green-600' : 'text-red-600'">
+                                    {{ usuario.status === 'ativo' ? 'Ativo' : 'Inativo' }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <!-- Ordenar por -->
-            <div class="border noto-sans-700 border-gray-300 w-40 h-[3.80rem] flex justify-center items-center">
-                <p class="text-[0.87em]">Ordenar Por</p>
-                <img class="ml-8" src="../assets/imgs/arrow.png" alt="logo">
-            </div>
-
-            <!-- Status -->
-            <div class="border noto-sans-700 border-gray-300 w-44 h-[3.80rem] flex justify-center items-center">
-                <p class="text-[0.87em] ">Status</p>
-                <img class='ml-16' src="../assets/imgs/arrow.png" alt="logo">
-            </div>
-
-            <!-- Limpar Filtro -->
-            <div class="rounded-r-lg noto-sans-700 border border-gray-300 w-40 h-[3.80rem] flex justify-center items-center">
-                <img class="h-4 w-4 mr-2" src="../assets/imgs/back.png" alt="logo">
-                <p class="text-[0.87em] text-red-600">Limpar Filtro</p>
-            </div>
+            <TheUserModal v-if="mostrar" :usuario="usuarioSelecionado" @close="fecharModal" />
         </div>
-
-        <!-- Botão -->
-        <button @click="cadastrarFazenda" class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm w-56 h-11 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
-            + CADASTRAR USUÁRIO
-        </button>
-
-    </div>
-    </div>
-    
-    <div> <!--Div Inferior-->
-        <div> <!--Div quadro-->
-            
-            <div class="p-4">
-    <div class="flex justify-end"></div>
-    <TheFarmModal v-if="mostrar" :fazenda="fazendaSelecionada" @close="fecharModal" />
-    <div class="mt-6 -ml-[1em]">
-        <table class="min-w-[98%] bg-white shadow-md rounded-lg overflow-hidden">
-            <thead class=" border bg-neutral-200 bg-opacity-40">
-                <tr class="rounded-t-lg">
-                    <th class="py-2 px-4 text-left text-gray-700">ID</th>
-                    <th class="py-2 px-4 text-left text-gray-700">USUÁRIO</th>
-                    <th class="py-2 px-4 text-left text-gray-700">CARGO</th>
-                    <th class="py-2 px-4 text-left text-gray-700">DATA CADASTRO</th>
-                    <th class="py-2 px-4 text-left text-gray-700">ADMIN</th>
-                    <th class="py-2 px-4 text-left text-gray-700">STATUS</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-300">
-                <tr v-for="fazenda in fazendas" :key="fazenda.id" class="hover:bg-gray-100 cursor-pointer"
-                    @click="abrirModal(fazenda)">
-                    <td class="py-2 px-4">{{ fazenda.id }}</td>
-                    <td class="py-2 px-4">{{ fazenda.nome }}</td>
-                    <td class="py-2 px-4">{{ fazenda.cargo }}</td>
-                    <td class="py-2 px-4">{{ fazenda.dataCadastro }}</td>
-                    <td class="py-2 px-4">{{ fazenda.admin }}</td>
-                    <td class="py-2 px-4">
-                        <span :class="fazenda.ativo ? 'text-green-600' : 'text-red-600'">
-                            {{ fazenda.ativo ? 'Ativo' : 'Inativo' }}
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-        </div>
-    </div>
-    
-</div> 
     </div>
 </template>
 
 <script>
 import TheSidebar from '../components/TheSidebar.vue';
-import TheFarmModal from '@/components/TheFarmModal.vue';
+import TheUserModal from '@/components/TheUserModal.vue';
 
 export default {
     name: 'TheUsers',
     components: {
         TheSidebar,
-        TheFarmModal,
+        TheUserModal,
     },
     data() {
         return {
             isSidebarVisible: false,
             mostrar: false,
-            fazendaSelecionada: null,
-            fazendas: [
-                {
-                    id: 1,
-                    nome: 'Roberto',
-                    cargo: 'Capataz',
-                    dataCadastro: '2023-05-10',
-                    admin: 'Master',
-                },
-                {
-                    id: 2,
-                    nome: 'Carlos',
-                    cargo: 'Inspetor de qualidade',
-                    dataCadastro: '2023-06-15',
-                    admin: 'Admin',
-                },
+            usuarioSelecionado: null,
+            usuarios: [
+                { id: 1, nome: 'Roberto Silva', cargo: 'Capataz', dataCadastro: '2023-05-10', admin: 'Master', status: 'ativo' },
+                { id: 2, nome: 'Carlos Pereira', cargo: 'Veterinário', dataCadastro: '2023-06-15', admin: 'Admin', status: 'ativo' },
+                { id: 3, nome: 'Ana Costa', cargo: 'Auxiliar de Ordenha', dataCadastro: '2023-04-20', admin: 'Usuário', status: 'ativo' },
+                { id: 4, nome: 'João Souza', cargo: 'Trabalhador Rural', dataCadastro: '2023-07-01', admin: 'Usuário', status: 'ativo' },
+                { id: 5, nome: 'Fernanda Oliveira', cargo: 'Gerente de Produção', dataCadastro: '2023-08-22', admin: 'Admin', status: 'ativo' },
+                { id: 6, nome: 'Mariana Fernandes', cargo: 'Inseminadora', dataCadastro: '2023-09-14', admin: 'Usuário', status: 'inativo' },
+                { id: 7, nome: 'Bruno Almeida', cargo: 'Peão de Lida', dataCadastro: '2023-10-05', admin: 'Usuário', status: 'ativo' },
+                { id: 8, nome: 'Paula Ramos', cargo: 'Nutricionista Animal', dataCadastro: '2023-08-28', admin: 'Usuário', status: 'ativo' },
             ],
+            showDropdown: {
+                data: false,
+                ordenar: false,
+                status: false,
+            },
+            selectedStatus: null,
+            selectedOrder: null,
+            selectedDateOrder: null,
         };
+    },
+    computed: {
+        filteredUsuarios() {
+            let filtered = [...this.usuarios];
+            if (this.selectedStatus) {
+                filtered = filtered.filter(usuario => usuario.status === this.selectedStatus);
+            }
+            if (this.selectedOrder === 'nome') {
+                filtered.sort((a, b) => a.nome.localeCompare(b.nome));
+            } else if (this.selectedOrder === 'cargo') {
+                filtered.sort((a, b) => a.cargo.localeCompare(b.cargo));
+            }
+            if (this.selectedDateOrder === 'asc') {
+                filtered.sort((a, b) => new Date(a.dataCadastro) - new Date(b.dataCadastro));
+            } else if (this.selectedDateOrder === 'desc') {
+                filtered.sort((a, b) => new Date(b.dataCadastro) - new Date(a.dataCadastro));
+            }
+            return filtered;
+        },
     },
     methods: {
         toggleSidebar() {
             this.isSidebarVisible = !this.isSidebarVisible;
         },
-        cadastrarFazenda() {
-            this.fazendaSelecionada = null;
+        cadastrarUsuario() {
+            this.usuarioSelecionado = null;
             this.mostrar = true;
         },
-        abrirModal(fazenda) {
-            this.fazendaSelecionada = fazenda;
+        abrirModal(usuario) {
+            this.usuarioSelecionado = usuario;
             this.mostrar = true;
         },
         fecharModal() {
             this.mostrar = false;
-            this.fazendaSelecionada = null;
-        }
+            this.usuarioSelecionado = null;
+        },
+        sortByDate(order) {
+            this.selectedDateOrder = order;
+        },
+        sortByName() {
+            this.selectedOrder = 'nome';
+        },
+        sortByRole() {
+            this.selectedOrder = 'cargo';
+        },
+        filterByStatus(status) {
+            this.selectedStatus = status;
+        },
+        clearFilters() {
+            this.selectedStatus = null;
+            this.selectedOrder = null;
+            this.selectedDateOrder = null;
+        },
     },
 };
 </script>
 
 <style scoped>
-.container_fazenda {
-    background-color: rgba(0, 0, 255, 0.477);
-    width: 100vw;
-    height: 100vh;
+.table-container {
+    overflow-x: auto;
 }
 </style>
-
