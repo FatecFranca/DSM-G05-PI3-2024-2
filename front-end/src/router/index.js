@@ -6,6 +6,7 @@ import TheAnimals from '@/views/TheAnimals.vue';
 import TheFarm from '@/views/TheFarm.vue';
 import TheInfos from '@/views/TheInfos.vue';
 import TheUsers from '@/views/TheUsers.vue';
+import TheAnimalsCard from '@/views/TheAnimalsCard.vue';
 
 
 const routes = [
@@ -37,6 +38,14 @@ const routes = [
     path: '/animais',
     name: 'Animals',
     component: TheAnimals,
+    meta: {
+      title: 'AgroTech | Animais'
+    }
+  },
+  {
+    path: '/animais-card',
+    name: 'AnimalsCard',
+    component: TheAnimalsCard,
     meta: {
       title: 'AgroTech | Animais'
     }
