@@ -7,8 +7,6 @@
                 <span class="text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">
                     Animais
                 </span>
-                <button @click="goBack"
-                    class="absolute right-5 bg-blue-200 text-blue-800 px-4 py-2 rounded">Voltar</button>
             </div>
 
             <div class="flex justify-between items-center p-4 bg-gray-50 shadow">
@@ -23,22 +21,32 @@
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <div v-for="animal in filteredAnimals" :key="animal.id" class="bg-white rounded-lg shadow-lg p-4">
-                    <img :src="animal.image" alt="Animal" class="w-full h-40 object-cover rounded-t-lg" />
+                    <img src="../assets/imgs/cow1.png" alt="Animal" class="w-full h-40 object-cover rounded-t-lg" />
                     <div class="p-3">
-                        <h3 class="text-lg font-semibold mb-1">{{ animal.idTag }}</h3>
-                        <p class="text-green-500 font-bold">Saudável e vacinada</p>
-                        <p class="text-sm text-gray-500 mt-1">Atualizações:</p>
-                        <ul class="text-sm text-gray-700 mb-1">
-                            <li>Aplicação de remédio: {{ animal.medicineTime }}</li>
-                            <li>Visita do veterinário: {{ animal.vetTime }}</li>
-                        </ul>
-                        <p class="text-sm text-gray-500">Agendamentos:</p>
-                        <ul class="text-sm text-gray-700">
-                            <li>Inseminação: {{ animal.inseminationDate }}</li>
-                            <li>Vacinação: {{ animal.vaccinationDate }}</li>
-                        </ul>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold mb-1">{{ animal.idTag }}</h3>
+                            <p class="text-green-500 font-bold">Saudável e vacinada</p>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-500 font-bold">Atualizações:</p>
+                                <ul class="text-sm text-gray-700 mb-1">
+                                    <li>Medicado: {{ animal.medicineTime }}</li>
+                                    <li>Inseminada: 20/03</li>
+                                    <li>Peso Atual: 357.76 kg</li>
+                                </ul>
+                            </div>
+                            <div class="pr-4 flex flex-col">
+                                <p class="text-sm text-gray-500 font-bold">Informações:</p>
+                                <ul class="text-sm text-gray-700">
+                                    <li>Vacinação: {{ animal.vaccinationDate }}</li>
+                                    <li>Lote: Lote 03</li>
+                                    <li>Parto: 20d</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,6 +71,8 @@ export default {
                 { id: 2, idTag: 'VA-1630', image: '/assets/images/cow.jpg', medicineTime: '14h', vetTime: '17h', inseminationDate: '22/03', vaccinationDate: '27/03' },
                 { id: 3, idTag: 'VA-1631', image: '/assets/images/cow.jpg', medicineTime: '15h', vetTime: '18h', inseminationDate: '23/03', vaccinationDate: '28/03' },
                 { id: 4, idTag: 'VA-1632', image: '/assets/images/cow.jpg', medicineTime: '12h', vetTime: '15h', inseminationDate: '24/03', vaccinationDate: '29/03' },
+                { id: 5, idTag: 'VA-1633', image: '/assets/images/cow.jpg', medicineTime: '11h', vetTime: '14h', inseminationDate: '25/03', vaccinationDate: '30/03' },
+                { id: 6, idTag: 'VA-1634', image: '/assets/images/cow.jpg', medicineTime: '10h', vetTime: '13h', inseminationDate: '26/03', vaccinationDate: '31/03' },
                 { id: 5, idTag: 'VA-1633', image: '/assets/images/cow.jpg', medicineTime: '11h', vetTime: '14h', inseminationDate: '25/03', vaccinationDate: '30/03' },
                 { id: 6, idTag: 'VA-1634', image: '/assets/images/cow.jpg', medicineTime: '10h', vetTime: '13h', inseminationDate: '26/03', vaccinationDate: '31/03' },
             ],
