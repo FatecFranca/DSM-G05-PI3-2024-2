@@ -7,13 +7,13 @@
 
     <!-- Modal -->
     <div v-if="isModalOpen" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div class="bg-[#eaf7e2] p-8 rounded-lg w-full max-w-5xl relative"> <!-- Aumentado para max-w-4xl -->
+      <div class="bg-[#eaf7e2] p-8 rounded-lg w-full max-w-5xl relative"> 
         <!-- Botão de fechar -->
         <span class="absolute top-4 right-4 text-2xl text-gray-600 cursor-pointer hover:text-gray-800" @click="closeModal">&times;</span>
 
         <!-- Título -->
         <h1 class="text-center text-2xl font-bold text-gray-800">Cadastro - Animal</h1>
-        <div class="w-1/5 h-[1px] bg-gray-800 mx-auto my-2"></div> <!-- Linha ajustada para 1px -->
+        <div class="w-1/5 h-[1px] bg-gray-800 mx-auto my-2"></div> 
 
         <!-- Contêiner principal -->
         <div class="flex flex-col md:flex-row gap-5 mt-4">
