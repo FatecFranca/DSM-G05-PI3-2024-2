@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Botão para abrir o modal -->
-    <button class="open-modal-btn bg-blue-600 text-white font-bold py-2 px-4 rounded mt-5 ml-5 hover:bg-blue-700" @click="openModal">
+    <button class="open-modal-btn bg-green-600 text-white font-bold py-2 px-4 rounded mt-5 ml-5 hover:bg-green-700" @click="openModal">
     Cadastro de Animais
     </button>
 
