@@ -50,9 +50,10 @@
                         <p class="text-sm font-bold">Limpar Filtro</p>
                     </div>
                 </div>
-                <button @click="cadastrarAnimal" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                <!-- <button @click="cadastrarAnimal" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                     + Cadastrar Animal
-                </button>
+                </button> -->
+                <TheAnimalModal />
             </div>
             <div class="flex-1 overflow-y-auto p-4">
                 <table class="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
@@ -90,12 +91,14 @@
 </template>
 
 <script>
+import TheAnimalModal from '../components/TheAnimalModal.vue';
 import TheSidebar from '../components/TheSidebar.vue';
 
 export default {
     name: 'TheAnimals',
     components: {
         TheSidebar,
+        TheAnimalModal,
     },
     data() {
         return {
@@ -146,6 +149,7 @@ export default {
         cadastrarAnimal() {
             //função para chamar o modal  quando ele ficar pronto
             alert("Cadastrar Animal");
+            openModal()
         },
         abrirModal(animal) {
             //função para chamar o modal  quando ele ficar pronto
