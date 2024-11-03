@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "concurrently \"npm run serve --prefix front-end\" \"npm run start --prefix back-end\"",
-    "atualizar": "npm install && (cd front-end && npm install) && (cd back-end && npm install)"
+    "atualizar": "npm install && (cd front-end && npm install) && (cd back-end && npm install)",
+    "build": "(cd front-end && npm run build) && (cd back-end && npm run build || echo 'Nenhum build necessário para o back-end')"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

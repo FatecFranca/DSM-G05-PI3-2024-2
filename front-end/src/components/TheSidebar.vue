@@ -4,7 +4,9 @@
     isSidebarVisible ? 'w-[300px]' : 'w-[70px]'
   ]">
     <div class="h-[85px] bg-gray-300 flex items-center justify-center w-full gap-4 py-4">
-      <img src="../assets/logo.png" :class="isSidebarVisible ? 'h-16' : 'h-10'" alt="Logo" />
+      <router-link to="home">
+        <img src="../assets/logo.png" :class="isSidebarVisible ? 'h-16' : 'h-10'" alt="Logo" />
+      </router-link>
       <span v-if="isSidebarVisible" class="text-lg font-semibold text-gray-800">AGROTECH</span>
     </div>
 
