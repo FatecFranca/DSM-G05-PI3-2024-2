@@ -15,7 +15,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/users': {
-        target: 'http://localhost:3000', // Para o backend
+        target: 'http://localhost:8080', // Backend na porta 8080
         changeOrigin: true,
         secure: false,
       },
