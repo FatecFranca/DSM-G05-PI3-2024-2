@@ -6,6 +6,7 @@
     <div class="direita flex w-full lg:w-1/2 h-screen justify-center items-center">
       <transition name="component-fade" mode="out-in">
         <component :is="view" key="view">
+          <!-- Login Form -->
           <div v-if="view === 'LoginForm'" class="login-form">
             <div>
               <h2 class="text-4xl font-bold">Login <span>AgroTech</span></h2>
@@ -29,6 +30,8 @@
               <h4>Não tem conta? <a href="#" @click="trocarParaCriarConta">Criar Conta</a></h4>
             </div>
           </div>
+
+          <!-- Create Account Form -->
           <div v-else-if="view === 'CriarContaForm'" class="criar-conta-form">
             <div>
               <h2 class="mb-[10%] text-4xl font-bold">Conta <span>AgroTech</span></h2>
@@ -52,6 +55,8 @@
               <h4>Já tem conta? <a href="#" @click="trocarParaLogin">Login Conta</a></h4>
             </div>
           </div>
+
+          <!-- Password Recovery Form -->
           <div v-else-if="view === 'RecuperarSenhaForm'" class="recuperar-senha-form">
             <div class="nomeprincipal">
               <h2 class="mb-[10%] text-4xl font-bold">Recuperar Senha <span>AgroTech</span></h2>
@@ -80,8 +85,10 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: import.meta.env.VITE_API_URL,
 });
+
+console.log('Base URL:', api.defaults.baseURL);
 
 export default {
   name: 'TheLogin',
@@ -156,6 +163,7 @@ export default {
     },
 
     enviarRecuperacao() {
+      // Lógica para enviar email de recuperação de senha
     },
 
     trocarParaCriarConta() {
@@ -222,42 +230,11 @@ input[type="email"] {
   font-size: 20px;
   font-weight: bold;
   transition: border-color 0.3s;
-  background-image: none;
-}
-
-input[type="password"] {
-  background-image: url("../assets/imgs/senha.png");
-  background-position: 10px center;
-  background-repeat: no-repeat;
-  background-size: 34px 34px;
-}
-
-input[type="email"] {
-  background-image: url("../assets/imgs/email.png");
-  background-position: 10px center;
-  background-repeat: no-repeat;
-  background-size: 34px 34px;
-}
-
-input[type="password"]:focus,
-input[type="email"]:focus {
-  border-color: #60b665;
-  outline: none;
 }
 
 .esqueceu-senha {
   margin-top: 10px;
   font-size: 14px;
-}
-
-.esqueceu-senha a {
-  color: #007BFF;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.esqueceu-senha a:hover {
-  color: #0056b3;
 }
 
 @media (max-width: 640px) {
