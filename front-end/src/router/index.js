@@ -76,11 +76,12 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
 
 router.beforeEach((to) => {
+  console.log(`Navegando para: ${window.location.origin}${to.fullPath}`);
   document.title = to.meta.title || 'AgroTech';
 });
 
