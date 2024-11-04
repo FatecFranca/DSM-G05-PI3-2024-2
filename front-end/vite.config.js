@@ -15,7 +15,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/users': {
-        target: 'http://localhost:8080', // Backend na porta 8080
+        target: process.env.VITE_API_URL,
         changeOrigin: true,
         secure: false,
       },
