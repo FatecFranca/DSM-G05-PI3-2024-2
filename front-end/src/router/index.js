@@ -8,7 +8,6 @@ import TheInfos from '@/views/TheInfos.vue';
 import TheUsers from '@/views/TheUsers.vue';
 import TheAnimalsCard from '@/views/TheAnimalsCard.vue';
 
-
 const routes = [
   {
     path: '/',
