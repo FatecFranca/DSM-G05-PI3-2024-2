@@ -81,7 +81,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  console.log(`Navegando para: ${window.location.origin}${to.fullPath}`);
   document.title = to.meta.title || 'AgroTech';
 });
 
