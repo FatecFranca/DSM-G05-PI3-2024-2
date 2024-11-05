@@ -7,6 +7,7 @@ import TheFarm from '@/views/TheFarm.vue';
 import TheInfos from '@/views/TheInfos.vue';
 import TheUsers from '@/views/TheUsers.vue';
 import TheAnimalsCard from '@/views/TheAnimalsCard.vue';
+import NotFound from '@/components/NotFound.vue';
 
 const routes = [
   {
@@ -71,6 +72,14 @@ const routes = [
     component: TheUsers,
     meta: {
       title: 'AgroTech | Usuários'
+    }
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound,
+    meta: {
+      title: 'AgroTech | NotFound Page'
     }
   }
 ];
