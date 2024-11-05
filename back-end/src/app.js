@@ -28,7 +28,6 @@ app.use('/animals', animalsRouter);
 app.use('/alerts', alertsRouter);
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
@@ -36,7 +35,6 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
