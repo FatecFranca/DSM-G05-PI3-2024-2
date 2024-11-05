@@ -14,8 +14,13 @@ import alertsRouter from './routes/alerts.js';
 
 const app = express();
 
+app.use(cors({
+  origin: 'https://dsm-g05-pi3-2024-2.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(logger('dev'));
-app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
