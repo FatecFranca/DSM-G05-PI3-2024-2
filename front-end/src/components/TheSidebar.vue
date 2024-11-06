@@ -53,8 +53,14 @@
         <i class="fa fa-user fa-lg"></i>
         <span v-if="isSidebarVisible" class="ml-2">Usuários</span>
       </RouterLink>
+      <RouterLink to="/animal" class="flex items-center text-white w-full" :class="{
+        'justify-center px-2 py-2': !isSidebarVisible,
+        'justify-start px-2 py-2': isSidebarVisible
+      }">
+        <i class="fa fa-blind fa-lg" aria-hidden="true"></i>
+        <span v-if="isSidebarVisible" class="ml-2">Animal</span>
+      </RouterLink>
     </div>
-
     <div class="flex mb-16 items-center w-full ml-4 gap-4">
       <img class="rounded-full h-12 w-12 border-2 border-gray-300" src="../assets/imgs/login.jpg" alt="User avatar" />
       <div class="flex flex-col items-start">
