@@ -8,7 +8,6 @@ import TheInfos from '@/views/TheInfos.vue';
 import TheUsers from '@/views/TheUsers.vue';
 import TheAnimalsCard from '@/views/TheAnimalsCard.vue';
 
-
 const routes = [
   {
     path: '/',
@@ -77,7 +76,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
 
