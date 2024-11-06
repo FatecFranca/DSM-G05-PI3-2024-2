@@ -1,22 +1,23 @@
 <template>
   <div>
     <!-- Botão para abrir o modal -->
-    <button class="open-modal-btn bg-green-600 text-white font-bold py-2 px-4 rounded mt-5 ml-5 hover:bg-green-700" @click="openModal">
-    Cadastro de Animais
+    <button class="open-modal-btn bg-green-600 text-white font-normal py-2 px-4 rounded mt-1 ml-5 hover:bg-green-700" @click="openModal">
+    + Cadastrar Animal
     </button>
 
     <!-- Modal -->
     <div v-if="isModalOpen" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
       <div class="bg-[#eaf7e2] p-8 rounded-lg w-full max-w-5xl relative"> 
         <!-- Botão de fechar -->
-        <span class="absolute top-4 right-4 text-2xl text-gray-600 cursor-pointer hover:text-gray-800" @click="closeModal">&times;</span>
+        <span class="absolute top-4 right-4 text-3xl text-gray-600 cursor-pointer hover:text-red-600" @click="closeModal">&times;</span>
 
         <!-- Título -->
-        <h1 class="text-center text-2xl font-bold text-gray-800">Cadastro - Animal</h1>
+        <h1 class="text-center text-2xl font-semibold text-gray-800">Cadastro - Animal</h1>
         <div class="w-1/5 h-[1px] bg-gray-800 mx-auto my-2"></div> 
 
         <!-- Contêiner principal -->
         <div class="flex flex-col md:flex-row gap-5 mt-4">
+          
           <!-- Coluna esquerda -->
           <div class="w-full md:w-1/2 space-y-3">
             <div>

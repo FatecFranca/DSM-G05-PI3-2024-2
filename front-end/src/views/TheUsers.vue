@@ -56,7 +56,7 @@
                         <p class="text-sm font-bold">Limpar Filtro</p>
                     </div>
                 </div>
-                <button @click="cadastrarUsuario" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700">
+                <button @click="cadastrarUsuario" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                     + Cadastrar Usuário
                 </button>
             </div>

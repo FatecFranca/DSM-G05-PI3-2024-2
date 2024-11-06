@@ -5,7 +5,7 @@
     isSidebarVisible ? 'w-[350px]' : 'w-[70px]'
   ]">
     <div class="h-[85px] bg-gray-300 flex items-center justify-center w-full">
-      <span v-if="isSidebarVisible">Menu</span>
+      <span v-if="isSidebarVisible">Menu AgroTech</span>
     </div>
     <div class="flex-1 flex-col items-center mt-4 w-full">
       <RouterLink to="/home" class="flex items-center p-2 text-white w-full justify-center">
