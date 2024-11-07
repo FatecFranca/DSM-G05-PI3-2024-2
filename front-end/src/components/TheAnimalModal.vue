@@ -48,14 +48,15 @@
               <label for="lote" class="block font-semibold">Lote</label>
               <input type="text" id="lote" v-model="animal.lote" required class="w-full p-2 border rounded"/>
             </div>
+            <label class="font-semibold">Status</label>
             <div class="flex">
               <button
                 :class="{'bg-green-300': animal.status === 'vivo', 'bg-white': animal.status !== 'vivo'}"
-                class="w-24 p-2 border border-gray-300 rounded-l-lg hover:bg-gray-200"
+                class="w-24 p-2 border border-gray-300 rounded-l-lg hover:bg-gray-200 -mt-1 -mb-1"
                 @click="toggleStatus('vivo')">Vivo</button>
               <button
                 :class="{'bg-red-300': animal.status === 'obito', 'bg-white': animal.status !== 'obito'}"
-                class="w-24 p-2 border border-gray-300 rounded-r-lg hover:bg-gray-200"
+                class="w-24 p-2 border border-gray-300 rounded-r-lg hover:bg-gray-200 -mt-1 -mb-1"
                 @click="toggleStatus('obito')">Óbito</button>
             </div>
           </div>
