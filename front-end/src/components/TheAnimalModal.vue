@@ -81,7 +81,8 @@
             </div>
             <div>
               <label for="imagem" class="block font-semibold">Imagem</label>
-              <input type="file" id="imagem" class="mt-1" @change="handleImageUpload" />
+              <input type="file" id="imagem" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 
+              file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-200 file:text-blue-800 hover:file:bg-blue-300" @change="handleImageUpload"/>
             </div>
           </div>
         </div>
