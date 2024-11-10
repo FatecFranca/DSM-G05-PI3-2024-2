@@ -14,11 +14,24 @@ import alertsRouter from './routes/alerts.js';
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://dsm-g05-pi3-2024-2.onrender.com',
+const allowedOrigins = [
+  'https://dsm-g05-pi3-2024-2.onrender.com',
+  'http://localhost:5173'
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(json());

@@ -6,32 +6,34 @@
     <div class="direita flex w-full lg:w-1/2 h-screen justify-center items-center">
       <transition name="component-fade" mode="out-in">
         <component :is="view" key="view">
-          <!-- Login Form -->
           <div v-if="view === 'LoginForm'" class="login-form">
-            <div>
-              <h2 class="text-4xl font-bold">Login <span>AgroTech</span></h2>
-            </div>
-            <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-            <div class="text-[20px]">
-              <h3>Email</h3>
-              <input type="email" v-model="email" placeholder="pecuariapro@123.com" required />
-            </div>
-            <div class="text-[20px]">
-              <h3>Senha</h3>
-              <input type="password" v-model="senha" placeholder="**********" required />
-              <div class="esqueceu-senha">
-                <a href="#" @click="trocarParaRecuperarSenha">Esqueceu a senha?</a>
+            <TheLoading :isLoading="isLoading" />
+            <div v-if="!isLoading">
+              <div>
+                <h2 class="text-4xl font-bold">Login <span>AgroTech</span></h2>
               </div>
-            </div>
-            <div class="mt-[10%] mb-[3%]">
-              <button class="botao" @click="validarLogin">Login</button>
-            </div>
-            <div class="flex justify-around text-[20px]">
-              <h4>Não tem conta? <a href="#" @click="trocarParaCriarConta">Criar Conta</a></h4>
+              <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+              <div class="text-[20px]">
+                <h3>Email</h3>
+                <input type="email" v-model="email" placeholder="pecuariapro@123.com" required
+                  @keyup.enter="validarLogin" />
+              </div>
+              <div class="text-[20px]">
+                <h3>Senha</h3>
+                <input type="password" v-model="senha" placeholder="**********" required @keyup.enter="validarLogin" />
+                <div class="esqueceu-senha">
+                  <a href="#" @click="trocarParaRecuperarSenha">Esqueceu a senha?</a>
+                </div>
+              </div>
+              <div class="mt-[10%] mb-[3%]">
+                <button class="botao" @click="validarLogin">Login</button>
+              </div>
+              <div class="flex justify-around text-[20px]">
+                <h4>Não tem conta? <a href="#" @click="trocarParaCriarConta">Criar Conta</a></h4>
+              </div>
             </div>
           </div>
 
-          <!-- Create Account Form -->
           <div v-else-if="view === 'CriarContaForm'" class="criar-conta-form">
             <div>
               <h2 class="mb-[10%] text-4xl font-bold">Conta <span>AgroTech</span></h2>
@@ -56,7 +58,6 @@
             </div>
           </div>
 
-          <!-- Password Recovery Form -->
           <div v-else-if="view === 'RecuperarSenhaForm'" class="recuperar-senha-form">
             <div class="nomeprincipal">
               <h2 class="mb-[10%] text-4xl font-bold">Recuperar Senha <span>AgroTech</span></h2>
@@ -83,6 +84,7 @@
 <script>
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import TheLoading from '../components/TheLoading.vue';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -90,6 +92,9 @@ const api = axios.create({
 
 export default {
   name: 'TheLogin',
+  components: {
+    TheLoading
+  },
   data() {
     return {
       email: "",
@@ -97,6 +102,7 @@ export default {
       confirmarSenha: "",
       errorMessage: "",
       view: 'LoginForm',
+      isLoading: false,
     };
   },
 
@@ -108,12 +114,12 @@ export default {
   methods: {
     async validarLogin() {
       this.errorMessage = "";
-
       if (!this.email || !this.senha) {
         this.errorMessage = "Por favor, preencha todos os campos.";
         return;
       }
 
+      this.isLoading = true;
       try {
         const response = await api.post(`/api/users/login`, {
           email: this.email,
@@ -126,14 +132,14 @@ export default {
           this.errorMessage = "Email ou senha incorretos.";
         }
       } catch (error) {
-        console.error("Erro no login:", error);
         this.errorMessage = error.response?.data?.message || "Erro ao tentar fazer login.";
+      } finally {
+        this.isLoading = false;
       }
     },
 
     async cadastrarConta() {
       this.errorMessage = "";
-
       if (!this.email || !this.senha || !this.confirmarSenha) {
         this.errorMessage = "Por favor, preencha todos os campos.";
         return;
@@ -144,6 +150,7 @@ export default {
         return;
       }
 
+      this.isLoading = true;
       try {
         const response = await api.post(`/api/users/register`, {
           email: this.email,
@@ -157,12 +164,12 @@ export default {
         }
       } catch (error) {
         this.errorMessage = error.response?.data?.message || "Erro ao tentar criar conta.";
+      } finally {
+        this.isLoading = false;
       }
     },
 
-    enviarRecuperacao() {
-      // Lógica para enviar email de recuperação de senha
-    },
+    enviarRecuperacao() { },
 
     trocarParaCriarConta() {
       this.view = 'CriarContaForm';
