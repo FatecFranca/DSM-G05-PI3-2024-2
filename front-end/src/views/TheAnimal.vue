@@ -71,10 +71,10 @@
                     <button @click="activeTab = 'history'" :class="{ 'bg-blue-200': activeTab === 'history' }"
                         class="px-4 py-2 rounded-r-md hover:bg-blue-300">Histórico</button>
                 </div>
-                <div class="w-full h-64 bg-gray-100 flex items-center justify-center rounded-md">
-                    <template v-if="activeTab === 'growth'">
-                        <p>Gráfico de crescimento (placeholder)</p>
-                    </template>
+                <div class="w-full h-96 bg-gray-100 flex items-center justify-center rounded-md">
+                            <template v-if="activeTab === 'growth'" >
+                                <GrowthChart :growthData="growthChartData" />
+                            </template>
                     <template v-else>
                         <table class="w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-4">
                             <thead class="bg-gray-200">
@@ -112,12 +112,14 @@
 <script>
 import TheSidebar from '../components/TheSidebar.vue';
 import TheModalAlert from '../components/TheModalAlert.vue';
+import GrowthChart from '../components/GrowthChart.vue';
 
 export default {
     name: 'AnimalDetails',
     components: {
         TheSidebar,
         TheModalAlert,
+        GrowthChart,
     },
     data() {
         return {
@@ -157,6 +159,23 @@ export default {
                 { id: 4, title: 'Chamada de manejo', date: '25/10/2024', details: 'Foi feita uma revisão do manejo na propriedade.' },
                 { id: 5, title: 'Chamada de observação', date: '30/10/2024', details: 'Observação regular do animal concluída.' },
             ],
+            growthChartData: [
+            
+  { year: new Date(2000, 0, 1), weight: 140, height: 80, circumference: 100, production: 110, nutrition: 170 },
+  { year: new Date(2002, 0, 1), weight: 220, height: 90, circumference: 110, production: 145, nutrition: 195 },
+  { year: new Date(2007, 0, 1), weight: 310, height: 100, circumference: 120, production: 175, nutrition: 215 },
+  { year: new Date(2011, 0, 1), weight: 370, height: 105, circumference: 130, production: 200, nutrition: 230 },
+  { year: new Date(2014, 0, 1), weight: 430, height: 110, circumference: 140, production: 225, nutrition: 250 },
+  { year: new Date(2017, 0, 1), weight: 490, height: 115, circumference: 150, production: 250, nutrition: 270 },
+  { year: new Date(2019, 0, 1), weight: 540, height: 120, circumference: 160, production: 275, nutrition: 285 },
+  { year: new Date(2021, 0, 1), weight: 600, height: 125, circumference: 170, production: 300, nutrition: 300 },
+  { year: new Date(2023, 0, 1), weight: 670, height: 130, circumference: 180, production: 325, nutrition: 315 },
+  { year: new Date(2025, 0, 1), weight: 740, height: 135, circumference: 190, production: 350, nutrition: 330 },
+  { year: new Date(2027, 0, 1), weight: 800, height: 140, circumference: 200, production: 375, nutrition: 340 }
+]
+
+
+
         };
     },
     methods: {
