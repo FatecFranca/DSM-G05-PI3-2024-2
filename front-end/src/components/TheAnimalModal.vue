@@ -7,7 +7,7 @@
 
     <!-- Modal -->
     <div v-if="isModalOpen" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div class="bg-[#eaf7e2] p-8 rounded-lg w-full max-w-5xl relative"> 
+      <div class="bg-white p-8 rounded-lg w-full max-w-5xl relative"> 
         <!-- Botão de fechar -->
         <span class="absolute top-4 right-4 text-3xl text-gray-600 cursor-pointer hover:text-red-600" @click="closeModal">&times;</span>
 
