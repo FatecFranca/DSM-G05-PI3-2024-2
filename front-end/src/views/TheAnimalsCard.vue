@@ -23,10 +23,11 @@
 
             <div class="overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <div v-for="animal in filteredAnimals" :key="animal.id" class="bg-white rounded-lg shadow-lg p-4">
-                    <img src="../assets/imgs/cow1.png" alt="Animal" class="w-full h-40 object-cover rounded-t-lg" />
+                    <img :src="animal.img_animal || '../assets/imgs/cow1.png'" alt="Animal"
+                        class="w-full h-40 object-cover rounded-t-lg" />
                     <div class="p-3">
                         <div class="mb-6">
-                            <h3 class="text-lg font-semibold mb-1">{{ animal.idTag }}</h3>
+                            <h3 class="text-lg font-semibold mb-1">{{ animal.earring }}</h3>
                             <p class="text-green-500 font-bold">Saudável e vacinada</p>
                         </div>
                         <div class="flex">
@@ -34,16 +35,16 @@
                                 <p class="text-sm text-gray-500 font-bold">Atualizações:</p>
                                 <ul class="text-sm text-gray-700 mb-1">
                                     <li>Medicado: {{ animal.medicineTime }}</li>
-                                    <li>Inseminada: 20/03</li>
-                                    <li>Peso Atual: 357.76 kg</li>
+                                    <li>Inseminada: {{ animal.inseminationDate }}</li>
+                                    <li>Peso Atual: {{ animal.weight || 'N/A' }}</li>
                                 </ul>
                             </div>
                             <div class="pr-4 flex flex-col">
                                 <p class="text-sm text-gray-500 font-bold">Informações:</p>
                                 <ul class="text-sm text-gray-700">
                                     <li>Vacinação: {{ animal.vaccinationDate }}</li>
-                                    <li>Lote: Lote 03</li>
-                                    <li>Parto: 20d</li>
+                                    <li>Lote: {{ animal.lote || 'N/A' }}</li>
+                                    <li>Parto: {{ animal.lastChildbirth || 'N/A' }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -56,6 +57,11 @@
 
 <script>
 import TheSidebar from '../components/TheSidebar.vue';
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+});
 
 export default {
     name: 'TheAnimalsCard',
@@ -66,16 +72,7 @@ export default {
         return {
             isSidebarVisible: false,
             searchQuery: '',
-            animals: [
-                { id: 1, idTag: 'VA-1629', image: '/assets/images/cow.jpg', medicineTime: '13h', vetTime: '16h', inseminationDate: '20/03', vaccinationDate: '25/03' },
-                { id: 2, idTag: 'VA-1630', image: '/assets/images/cow.jpg', medicineTime: '14h', vetTime: '17h', inseminationDate: '22/03', vaccinationDate: '27/03' },
-                { id: 3, idTag: 'VA-1631', image: '/assets/images/cow.jpg', medicineTime: '15h', vetTime: '18h', inseminationDate: '23/03', vaccinationDate: '28/03' },
-                { id: 4, idTag: 'VA-1632', image: '/assets/images/cow.jpg', medicineTime: '12h', vetTime: '15h', inseminationDate: '24/03', vaccinationDate: '29/03' },
-                { id: 5, idTag: 'VA-1633', image: '/assets/images/cow.jpg', medicineTime: '11h', vetTime: '14h', inseminationDate: '25/03', vaccinationDate: '30/03' },
-                { id: 6, idTag: 'VA-1634', image: '/assets/images/cow.jpg', medicineTime: '10h', vetTime: '13h', inseminationDate: '26/03', vaccinationDate: '31/03' },
-                { id: 5, idTag: 'VA-1633', image: '/assets/images/cow.jpg', medicineTime: '11h', vetTime: '14h', inseminationDate: '25/03', vaccinationDate: '30/03' },
-                { id: 6, idTag: 'VA-1634', image: '/assets/images/cow.jpg', medicineTime: '10h', vetTime: '13h', inseminationDate: '26/03', vaccinationDate: '31/03' },
-            ],
+            animals: [],
         };
     },
     computed: {
@@ -88,12 +85,21 @@ export default {
         toggleSidebar() {
             this.isSidebarVisible = !this.isSidebarVisible;
         },
-        goBack() {
-            alert('Going back to the previous screen.');
-        },
         openFilter() {
-            alert('Opening filter options.');
+            alert('Abrindo filtro.');
         },
+        async fetchAnimals() {
+            try {
+                const response = await api.get('api/animals');
+                this.animals = response.data;
+                console.log('Dados dos animais:', this.animals);
+            } catch (error) {
+                console.error('Erro ao buscar os dados dos animais:', error);
+            }
+        },
+    },
+    mounted() {
+        this.fetchAnimals();
     },
 };
 </script>

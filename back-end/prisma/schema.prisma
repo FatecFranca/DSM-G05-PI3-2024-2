@@ -59,6 +59,7 @@ model Animal {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   earring         String
   name_animal     String
+  img_animal      String?
   collar          String
   gender          String
   patchId         String    @db.ObjectId

@@ -42,7 +42,7 @@ app.use('/api/users', usersRouter);
 app.use('/patches', patchesRouter);
 app.use('/farms', farmsRouter);
 app.use('/ocupations', ocupationsRouter);
-app.use('/animals', animalsRouter);
+app.use('/api/animals', animalsRouter);
 app.use('/alerts', alertsRouter);
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
