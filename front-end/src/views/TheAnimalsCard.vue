@@ -21,16 +21,16 @@
                 </button>
             </div>
 
- <!-- Modal de Filtro -->
- <div v-if="isFilterModalVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div v-if="isFilterModalVisible"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <div class="bg-white w-[300px] md:w-[500px] p-6 rounded-lg shadow-lg relative">
                     <h2 class="text-lg font-semibold mb-4">Filtros</h2>
 
-                    <!-- Opções de Filtros -->
                     <div class="space-y-4">
                         <div>
                             <label for="weight" class="block text-sm font-medium text-gray-700">Peso do Animal</label>
-                            <select id="weight" v-model="filters.weight" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
+                            <select id="weight" v-model="filters.weight"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                                 <option value="">Selecione Peso</option>
                                 <option value="100kg-200kg">100kg-200kg </option>
                                 <option value="201kg-300kg">201kg-300kg</option>
@@ -40,7 +40,8 @@
 
                         <div>
                             <label for="age" class="block text-sm font-medium text-gray-700">Idade</label>
-                            <select id="age" v-model="filters.age" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
+                            <select id="age" v-model="filters.age"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                                 <option value="">Selecione a Idade</option>
                                 <option value="1-2">1-2 anos</option>
                                 <option value="3-4">3-4 anos</option>
@@ -50,7 +51,8 @@
 
                         <div>
                             <label for="health" class="block text-sm font-medium text-gray-700">Estado de Saúde</label>
-                            <select id="health" v-model="filters.health" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
+                            <select id="health" v-model="filters.health"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                                 <option value="">Selecione o Estado de Saúde</option>
                                 <option value="saudável">Saudável</option>
                                 <option value="doente">Doente</option>
@@ -58,23 +60,28 @@
                         </div>
                     </div>
                     <br>
-                        <div>
-                            <label for="medicineTime" class="block text-sm font-medium text-gray-700">Horário de Medicação</label>
-                            <input type="text" id="medicineTime" v-model="filters.medicineTime" placeholder="Ex: 14h" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"/>
-                        </div>
-                        <br>
-                        <div>
-                            <label for="inseminationDate" class="block text-sm font-medium text-gray-700">Data de Inseminação</label>
-                            <input type="text" id="inseminationDate" v-model="filters.inseminationDate" placeholder="Ex: 20/03" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"/>
-                        </div>
-
-                    <!-- Botões -->
-                    <div class="mt-6 flex justify-end gap-4">
-                        <button @click="clearFilters" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md">Limpar</button>
-                        <button @click="applyFilters" class="bg-green-600 text-white px-4 py-2 rounded-md">Aplicar</button>
+                    <div>
+                        <label for="medicineTime" class="block text-sm font-medium text-gray-700">Horário de
+                            Medicação</label>
+                        <input type="text" id="medicineTime" v-model="filters.medicineTime" placeholder="Ex: 14h"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm" />
+                    </div>
+                    <br>
+                    <div>
+                        <label for="inseminationDate" class="block text-sm font-medium text-gray-700">Data de
+                            Inseminação</label>
+                        <input type="text" id="inseminationDate" v-model="filters.inseminationDate"
+                            placeholder="Ex: 20/03"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm" />
                     </div>
 
-                    <!-- Botão de Fechar -->
+                    <div class="mt-6 flex justify-end gap-4">
+                        <button @click="clearFilters"
+                            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md">Limpar</button>
+                        <button @click="applyFilters"
+                            class="bg-green-600 text-white px-4 py-2 rounded-md">Aplicar</button>
+                    </div>
+
                     <button @click="closeFilterModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
                         <i class="fa fa-times"></i>
                     </button>
@@ -134,6 +141,13 @@ export default {
             isFilterModalVisible: false,
             searchQuery: '',
             animals: [],
+            filters: {
+                weight: '',
+                age: '',
+                health: '',
+                medicineTime: '',
+                inseminationDate: '',
+            },
         };
     },
     computed: {
@@ -157,7 +171,8 @@ export default {
             if (this.filters.inseminationDate) {
                 filtered = filtered.filter(animal => animal.inseminationDate === this.filters.inseminationDate);
             }
-            return filtered;}
+            return filtered;
+        },
     },
     methods: {
         toggleSidebar() {
@@ -170,7 +185,7 @@ export default {
             this.isFilterModalVisible = false;
         },
         clearFilters() {
-            this.filters = {weight:'', age:'', tag:'', health: '', medicineTime: '', inseminationDate: '' };
+            this.filters = { weight: '', age: '', health: '', medicineTime: '', inseminationDate: '' };
         },
         applyFilters() {
             this.closeFilterModal();
