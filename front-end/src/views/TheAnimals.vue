@@ -9,50 +9,10 @@
                 </span>
             </div>
             <div class="flex justify-between items-center p-4 bg-gray-50 shadow">
-                <div class="flex items-center bg-white rounded-lg border border-gray-300 shadow relative">
-                    <div class="border-r border-gray-300 p-3 flex items-center">
-                        <img class="w-5 h-5" src="../assets/imgs/filter.png" alt="Filtro" />
-                    </div>
-                    <div class="p-3 font-bold">
-                        <p class="text-sm">Filtro</p>
-                    </div>
-                    <input type="text" v-model="filterBangle" placeholder="Brinco"
-                        class="border-l border-gray-300 p-3 text-sm" />
-                    <input type="text" v-model="filterBatch" placeholder="Lote"
-                        class="border-l border-gray-300 p-3 text-sm" />
-                    <div @mouseenter="showDropdown.sexo = true" @mouseleave="showDropdown.sexo = false"
-                        class="border-l border-r border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                        <p class="text-sm font-bold">Sexo</p>
-                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-                        <ul v-show="showDropdown.sexo"
-                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
-                            <li @click="filterByGender('Fêmea')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                                Fêmea</li>
-                            <li @click="filterByGender('Macho')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                                Macho</li>
-                        </ul>
-                    </div>
-                    <div @mouseenter="showDropdown.status = true" @mouseleave="showDropdown.status = false"
-                        class="border-l border-r border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                        <p class="text-sm font-bold">Status</p>
-                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-                        <ul v-show="showDropdown.status"
-                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
-                            <li @click="filterByStatus(true)" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Ativo
-                            </li>
-                            <li @click="filterByStatus(false)" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                                Inativo</li>
-                        </ul>
-                    </div>
-                    <div class="border-l border-gray-300 p-3 flex items-center space-x-1 text-red-600 cursor-pointer"
-                        @click="clearFilters">
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
-                        <p class="text-sm font-bold">Limpar Filtro</p>
-                    </div>
-                </div>
-                <!-- <button @click="cadastrarAnimal" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    + Cadastrar Animal
-                </button> -->
+                <button @click="openFilterModal" class="flex items-center bg-white rounded-lg border border-gray-300 shadow p-3 font-bold">
+                    <img class="w-5 h-5 mr-2" src="../assets/imgs/filter.png" alt="Filtro" />
+                    Filtro
+                </button>
                 <TheAnimalModal />
             </div>
             <div class="flex-1 overflow-y-auto p-4">
@@ -87,6 +47,41 @@
                 </table>
             </div>
         </div>
+
+        <!-- Modal de Filtro -->
+        <div v-if="isFilterModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                <h2 class="text-xl font-bold mb-4">Filtros</h2>
+                <div class="mb-4">
+                    <input type="text" v-model="filterBangle" placeholder="Brinco"
+                        class="w-full border border-gray-300 p-3 text-sm rounded" />
+                </div>
+                <div class="mb-4">
+                    <input type="text" v-model="filterBatch" placeholder="Lote"
+                        class="w-full border border-gray-300 p-3 text-sm rounded" />
+                </div>
+                <div class="mb-4">
+                    <label class="font-bold">Sexo:</label>
+                    <select v-model="filterGender" class="w-full border border-gray-300 p-3 text-sm rounded">
+                        <option value="">Todos</option>
+                        <option value="Fêmea">Fêmea</option>
+                        <option value="Macho">Macho</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="font-bold">Status:</label>
+                    <select v-model="selectedStatus" class="w-full border border-gray-300 p-3 text-sm rounded">
+                        <option :value="null">Todos</option>
+                        <option :value="true">Ativo</option>
+                        <option :value="false">Inativo</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button @click="clearFilters" class="bg-gray-200 px-4 py-2 rounded">Limpar Filtro</button>
+                    <button @click="closeFilterModal" class="bg-blue-600 text-white px-4 py-2 rounded">Aplicar</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -103,6 +98,7 @@ export default {
     data() {
         return {
             isSidebarVisible: false,
+            isFilterModalOpen: false,
             animals: [
                 { id: 1, brinco: 'A123', nome: 'Bela', lote: 'Lote 1', idade: 3, ultimaInseminacao: '2023-07-21', sexo: 'Fêmea', ativo: true },
                 { id: 2, brinco: 'B456', nome: 'Zorro', lote: 'Lote 2', idade: 4, ultimaInseminacao: null, sexo: 'Macho', ativo: false },
@@ -146,22 +142,11 @@ export default {
         toggleSidebar() {
             this.isSidebarVisible = !this.isSidebarVisible;
         },
-        cadastrarAnimal() {
-            //função para chamar o modal  quando ele ficar pronto
-            alert("Cadastrar Animal");
-            openModal()
+        openFilterModal() {
+            this.isFilterModalOpen = true;
         },
-        abrirModal(animal) {
-            //função para chamar o modal  quando ele ficar pronto
-            alert(`Detalhes do animal: ${animal.nome}`);
-        },
-        filterByGender(gender) {
-            this.filterGender = gender;
-            this.showDropdown.sexo = false;
-        },
-        filterByStatus(status) {
-            this.selectedStatus = status;
-            this.showDropdown.status = false;
+        closeFilterModal() {
+            this.isFilterModalOpen = false;
         },
         clearFilters() {
             this.filterBangle = '';
