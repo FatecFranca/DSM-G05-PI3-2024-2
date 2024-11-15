@@ -61,6 +61,9 @@ controller.retrieveAll = async function (req, res) {
     try {
         const result = await prisma.user.findMany({
             orderBy: [{ name: 'asc' }],
+            include: {
+                ocupation: true,
+            },
         });
         res.send(result);
     } catch (error) {

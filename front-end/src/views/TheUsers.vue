@@ -65,7 +65,7 @@
                     <thead class="bg-gray-200">
                         <tr>
                             <th class="py-2 px-4 text-left text-gray-700">ID</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Usuário</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Email</th>
                             <th class="py-2 px-4 text-left text-gray-700">Cargo</th>
                             <th class="py-2 px-4 text-left text-gray-700">Data Cadastro</th>
                             <th class="py-2 px-4 text-left text-gray-700">Admin</th>
@@ -73,16 +73,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="usuario in filteredUsuarios" :key="usuario.id"
+                        <tr v-if="filteredUsuarios.length === 0">
+                            <td colspan="6" class="py-4 text-center text-gray-500">Nenhum usuário encontrado.</td>
+                        </tr>
+                        <tr v-for="(usuario, index) in filteredUsuarios" :key="usuario.id"
                             class="hover:bg-gray-100 cursor-pointer" @click="abrirModal(usuario)">
-                            <td class="py-2 px-4 border-b">{{ usuario.id }}</td>
-                            <td class="py-2 px-4 border-b">{{ usuario.nome }}</td>
-                            <td class="py-2 px-4 border-b">{{ usuario.cargo }}</td>
-                            <td class="py-2 px-4 border-b">{{ usuario.dataCadastro }}</td>
-                            <td class="py-2 px-4 border-b">{{ usuario.admin }}</td>
+                            <td class="py-2 px-4 border-b">{{ index + 1 }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.email }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.ocupation?.ocupation_name || 'N/A' }}</td>
+                            <td class="py-2 px-4 border-b">{{ formatarData(usuario.created_at) }}</td>
+                            <td class="py-2 px-4 border-b">{{ usuario.master ? 'Sim' : 'Não' }}</td>
                             <td class="py-2 px-4 border-b">
-                                <span :class="usuario.status === 'ativo' ? 'text-green-600' : 'text-red-600'">
-                                    {{ usuario.status === 'ativo' ? 'Ativo' : 'Inativo' }}
+                                <span :class="usuario.status_active ? 'text-green-600' : 'text-red-600'">
+                                    {{ usuario.status_active ? 'Ativo' : 'Inativo' }}
                                 </span>
                             </td>
                         </tr>
@@ -97,6 +100,11 @@
 <script>
 import TheSidebar from '../components/TheSidebar.vue';
 import TheUserModal from '@/components/TheUserModal.vue';
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+});
 
 export default {
     name: 'TheUsers',
@@ -109,24 +117,15 @@ export default {
             isSidebarVisible: false,
             mostrar: false,
             usuarioSelecionado: null,
-            usuarios: [
-                { id: 1, nome: 'Roberto Silva', cargo: 'Capataz', dataCadastro: '2023-05-10', admin: 'Master', status: 'ativo' },
-                { id: 2, nome: 'Carlos Pereira', cargo: 'Veterinário', dataCadastro: '2023-06-15', admin: 'Admin', status: 'ativo' },
-                { id: 3, nome: 'Ana Costa', cargo: 'Auxiliar de Ordenha', dataCadastro: '2023-04-20', admin: 'Usuário', status: 'ativo' },
-                { id: 4, nome: 'João Souza', cargo: 'Trabalhador Rural', dataCadastro: '2023-07-01', admin: 'Usuário', status: 'ativo' },
-                { id: 5, nome: 'Fernanda Oliveira', cargo: 'Gerente de Produção', dataCadastro: '2023-08-22', admin: 'Admin', status: 'ativo' },
-                { id: 6, nome: 'Mariana Fernandes', cargo: 'Inseminadora', dataCadastro: '2023-09-14', admin: 'Usuário', status: 'inativo' },
-                { id: 7, nome: 'Bruno Almeida', cargo: 'Peão de Lida', dataCadastro: '2023-10-05', admin: 'Usuário', status: 'ativo' },
-                { id: 8, nome: 'Paula Ramos', cargo: 'Nutricionista Animal', dataCadastro: '2023-08-28', admin: 'Usuário', status: 'ativo' },
-            ],
+            usuarios: [],
+            selectedStatus: '',
+            selectedOrder: '',
+            selectedDateOrder: '',
             showDropdown: {
                 data: false,
                 ordenar: false,
-                status: false,
-            },
-            selectedStatus: null,
-            selectedOrder: null,
-            selectedDateOrder: null,
+                status: false
+            }
         };
     },
     computed: {
@@ -153,7 +152,13 @@ export default {
             this.isSidebarVisible = !this.isSidebarVisible;
         },
         cadastrarUsuario() {
-            this.usuarioSelecionado = null;
+            this.usuarioSelecionado = {
+                name: '',
+                email: '',
+                password: '',
+                status_active: true,
+                ocupationId: 1
+            };
             this.mostrar = true;
         },
         abrirModal(usuario) {
@@ -162,7 +167,9 @@ export default {
         },
         fecharModal() {
             this.mostrar = false;
-            this.usuarioSelecionado = null;
+        },
+        formatarData(data) {
+            return new Date(data).toLocaleDateString('pt-BR');
         },
         sortByDate(order) {
             this.selectedDateOrder = order;
@@ -177,16 +184,18 @@ export default {
             this.selectedStatus = status;
         },
         clearFilters() {
-            this.selectedStatus = null;
-            this.selectedOrder = null;
-            this.selectedDateOrder = null;
+            this.selectedStatus = '';
+            this.selectedOrder = '';
+            this.selectedDateOrder = '';
         },
+        carregarUsuarios() {
+            api.get('/api/users').then(response => {
+                this.usuarios = response.data;
+            });
+        }
     },
+    created() {
+        this.carregarUsuarios();
+    }
 };
 </script>
-
-<style scoped>
-.table-container {
-    overflow-x: auto;
-}
-</style>

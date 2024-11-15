@@ -12,78 +12,82 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Nome *</label>
-                        <input type="text" id="name" name="name" required
+                        <input type="text" id="name" v-model="usuario.name" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
-                        <label for="cnpj" class="block text-sm font-medium text-gray-700">Cargo *</label>
-                        <input type="text" id="cnpj" name="cnpj" v-mask="'##.###.###/####-##'" required
+                        <label for="ocupation" class="block text-sm font-medium text-gray-700">Cargo *</label>
+                        <input type="text" id="ocupation" v-model="usuario.ocupation" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
                         <label for="cep" class="block text-sm font-medium text-gray-700">CEP</label>
-                        <input type="text" id="cep" name="cep" v-mask="'#####-###'" required
+                        <input type="text" id="cep" v-model="usuario.cep" v-mask="'#####-###'"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
                         <label for="address" class="block text-sm font-medium text-gray-700">Endereço *</label>
-                        <input type="text" id="address" name="address" required
+                        <input type="text" id="address" v-model="usuario.address" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
                         <label for="number_address" class="block text-sm font-medium text-gray-700">N°</label>
-                        <input type="number" id="number_address" name="number_address" required
+                        <input type="number" id="number_address" v-model="usuario.number_address" required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div>
                         <label for="phone_number" class="block text-sm font-medium text-gray-700">Celular *</label>
-                        <input type="tel" id="phone_number" name="phone_number" v-mask="'(##) #####-####'" required
+                        <input type="tel" id="phone_number" v-model="usuario.phone_number" v-mask="'(##) #####-####'"
+                            required
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div class="flex items-center space-x-2">
                         <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <input type="checkbox" id="status" name="status" v-model="isActive"
+                        <input type="checkbox" id="status" v-model="usuario.status_active"
                             class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                        <span class="text-sm text-gray-700">{{ isActive ? 'Ativo' : 'Inativo' }}</span>
+                        <span class="text-sm text-gray-700">{{ usuario.status_active ? 'Ativo' : 'Inativo' }}</span>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nível de Permissão</label>
                         <div class="flex space-x-4">
                             <label class="flex items-center space-x-2">
-                                <input type="radio" name="permission_level" value="Admin" v-model="permissionLevel"
-                                    class="hidden" />
-                                <span :class="permissionLevel === 'Admin' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
+                                <input type="radio" name="permission_level" value="Admin"
+                                    v-model="usuario.permissionLevel" class="hidden" />
+                                <span
+                                    :class="usuario.permissionLevel === 'Admin' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
                                     class="px-3 py-1 rounded-full cursor-pointer">Admin</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="radio" name="permission_level" value="Master" v-model="permissionLevel"
-                                    class="hidden" />
-                                <span :class="permissionLevel === 'Master' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
+                                <input type="radio" name="permission_level" value="Master"
+                                    v-model="usuario.permissionLevel" class="hidden" />
+                                <span
+                                    :class="usuario.permissionLevel === 'Master' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
                                     class="px-3 py-1 rounded-full cursor-pointer">Master</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="radio" name="permission_level" value="Observer" v-model="permissionLevel"
-                                    class="hidden" />
-                                <span :class="permissionLevel === 'Observer' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
+                                <input type="radio" name="permission_level" value="Observer"
+                                    v-model="usuario.permissionLevel" class="hidden" />
+                                <span
+                                    :class="usuario.permissionLevel === 'Observer' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
                                     class="px-3 py-1 rounded-full cursor-pointer">Observer</span>
                             </label>
                         </div>
                     </div>
                     <div>
                         <label for="created_at" class="block text-sm font-medium text-gray-700">Data Cadastro</label>
-                        <input type="date" id="created_at" name="created_at" required disabled
+                        <input type="date" id="created_at" v-model="usuario.created_at" required disabled
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
                     <div class="col-span-2">
                         <label for="obs" class="block text-sm font-medium text-gray-700">Observações</label>
-                        <textarea id="obs" name="obs" rows="4"
+                        <textarea id="obs" v-model="usuario.obs" rows="4"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                     </div>
                 </div>
                 <div class="flex justify-end mt-4">
                     <button type="submit"
                         class="px-6 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors">
-                        Cadastrar
+                        {{ usuario.id ? 'Salvar Alterações' : 'Cadastrar' }}
                     </button>
                 </div>
             </form>
@@ -93,15 +97,42 @@
 
 <script>
 export default {
+    props: {
+        usuario: {
+            type: Object,
+            default: () => ({
+                name: '',
+                ocupation: '',
+                cep: '',
+                address: '',
+                number_address: '',
+                phone_number: '',
+                status_active: false,
+                permissionLevel: 'Admin',
+                created_at: '',
+                obs: '',
+            }),
+        },
+    },
     data() {
         return {
-            isActive: false,
-            permissionLevel: 'Admin', // Define o nível padrão
+            isActive: this.usuario.status_active,
+            permissionLevel: this.usuario.permissionLevel,
         };
+    },
+    watch: {
+        usuario: {
+            handler(newValue) {
+                if (newValue) {
+                    this.isActive = newValue.status_active;
+                    this.permissionLevel = newValue.permissionLevel;
+                }
+            },
+            deep: true,
+        },
     },
 };
 </script>
-
 
 <style scoped>
 @media (max-width: 768px) {
