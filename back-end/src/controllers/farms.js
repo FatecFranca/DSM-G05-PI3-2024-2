@@ -1,75 +1,81 @@
-import { raw } from '@prisma/client/runtime/library'
-import prisma from '../database/client.js'
+import prisma from '../database/client.js';
 
-const controller = {}
+const controller = {};
 
-controller.create = async function (req, res) {
+controller.create = async (req, res) => {
     try {
-        await prisma.farm.create({ data: req.body })
-        res.status(200).end()
+        await prisma.farm.create({ data: req.body });
+        res.status(200).end();
     } catch (error) {
-        console.error(error)
-        res.status(500).send(error)
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao criar fazenda.' });
     }
-    
-}
+};
 
-controller.retrieveAll = async function (req, res) {
+controller.retrieveAll = async (req, res) => {
     try {
-        const result = await prisma.farm.findMany({
-            orderBy: [{ fantasy_name: 'asc' }]
-        })
-        res.send(result)
+        const farms = await prisma.farm.findMany({
+            orderBy: { fantasy_name: 'asc' },
+        });
+        res.status(200).json(farms);
     } catch (error) {
-        console.error(error)
-        res.status(500).send(error)
+        console.error('Erro ao buscar fazendas:', error);
+        res.status(500).json({ error: 'Erro ao buscar fazendas.' });
     }
-}
+};
 
-controller.retrieveOne = async function (req, res) {
+controller.retrieveOne = async (req, res) => {
     try {
-            const result = await prisma.farm.findUnique({
-            where: { id: req.body.id }
-        })
-
-        if(result) res.send(result)
-        else res.send(404).end()
-    } catch (error) {
-        console.error(error)
-        res.status(500).send(error)
-    }
-}
-
-controller.update = async function (req, res) {
-    try {
-        const result = await prisma.farm.update({
+        const farm = await prisma.farm.findUnique({
             where: { id: req.params.id },
-            data: req.body
-        })
+        });
 
-        if(result) res.status(204).end()
-        res.status(404).end()
+        if (!farm) {
+            return res.status(404).json({ error: 'Fazenda não encontrada.' });
+        }
+        res.status(200).json(farm);
     } catch (error) {
-        console.error(error)
-        res.status(500).send(error)
+        console.error('Erro ao buscar fazenda:', error);
+        res.status(500).json({ error: 'Erro ao buscar fazenda.' });
     }
-}
+};
 
-controller.delete = async function (req, res) {
+controller.update = async (req, res) => {
     try {
-        const result = await prisma.farm.delete ({
-            where: { id: req.params.id }
-        })
-        raw.status(204).end()
-    } catch (error) {
-        if(error?.code === 'P2025') {
-            res.status(404).end()
-        }
-        else {
-            console.error(error)
-            res.status(500).send(error)
-        }
-    }
-}
+        const { id, registration_date, ...dataToUpdate } = req.body;
 
-export default controller
+        if (registration_date) {
+            dataToUpdate.registration_date = new Date(registration_date).toISOString();
+        }
+
+        const updatedFarm = await prisma.farm.update({
+            where: { id: req.params.id },
+            data: dataToUpdate,
+        });
+
+        res.status(200).json(updatedFarm);
+    } catch (error) {
+        console.error('Erro ao atualizar fazenda:', error);
+        if (error?.code === 'P2025') {
+            return res.status(404).json({ error: 'Fazenda não encontrada para atualização.' });
+        }
+        res.status(500).json({ error: 'Erro ao atualizar fazenda.' });
+    }
+};
+
+controller.delete = async (req, res) => {
+    try {
+        await prisma.farm.delete({
+            where: { id: req.params.id },
+        });
+        res.status(204).end();
+    } catch (error) {
+        console.error('Erro ao deletar fazenda:', error);
+        if (error?.code === 'P2025') {
+            return res.status(404).json({ error: 'Fazenda não encontrada para exclusão.' });
+        }
+        res.status(500).json({ error: 'Erro ao deletar fazenda.' });
+    }
+};
+
+export default controller;

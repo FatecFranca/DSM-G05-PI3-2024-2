@@ -32,14 +32,15 @@ model Ocupation {
 model Farm {
   id                String    @id @default(auto()) @map("_id") @db.ObjectId
   registration_date DateTime?
-  status            Boolean
   cnpj              String    @unique
+  num_animals       Int
   fantasy_name      String
   social_reason     String?
   cep               String?
   address           String
   number_address    String?
   phone_number      String
+  obs               String?
   created_at        DateTime  @default(now())
   status_active     Boolean
   users             User[]
