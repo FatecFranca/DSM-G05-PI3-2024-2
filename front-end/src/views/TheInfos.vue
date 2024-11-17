@@ -16,38 +16,6 @@
                     <div class="p-3 font-bold">
                         <p class="text-sm">Filtro</p>
                     </div>
-                    <div @mouseenter="showDropdown.data = true" @mouseleave="showDropdown.data = false"
-                        class="border-l border-r border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                        <p class="text-sm font-bold">Data</p>
-                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-                        <ul v-show="showDropdown.data"
-                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
-                            <li @click="sortByDate('asc')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Mais
-                                Antigo</li>
-                            <li @click="sortByDate('desc')" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Mais Novo
-                            </li>
-                        </ul>
-                    </div>
-                    <div @mouseenter="showDropdown.categoria = true" @mouseleave="showDropdown.categoria = false"
-                        class="border-l border-gray-300 p-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                        <p class="text-sm font-bold">Categoria</p>
-                        <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-                        <ul v-show="showDropdown.categoria"
-                            class="absolute top-12 left-0 bg-white shadow-lg rounded-md border w-32">
-                            <li v-for="categoria in categorias" :key="categoria" @click="filterByCategoria(categoria)"
-                                class="px-4 py-2 hover:bg-gray-200 cursor-pointer">{{ categoria }}</li>
-                        </ul>
-                    </div>
-                    <select v-model="selectedAssunto"
-                        class="border-l border-r border-gray-300 p-3 text-gray-800 cursor-pointer bg-white">
-                        <option value="" disabled>Escolha um Assunto</option>
-                        <option v-for="assunto in assuntos" :key="assunto" :value="assunto">{{ assunto }}</option>
-                    </select>
-                    <div class="border-l border-gray-300 p-3 flex items-center space-x-1 text-red-600 cursor-pointer"
-                        @click="clearFilters">
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
-                        <p class="text-sm font-bold">Limpar Filtro</p>
-                    </div>
                 </div>
                 <button @click="openModal" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                     + Cadastrar Informação
@@ -64,12 +32,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr v-if="filteredInfos.length === 0">
+                            <td colspan="4" class="py-2 px-4 text-center text-gray-500">Nenhuma informação disponível
+                            </td>
+                        </tr>
                         <tr v-for="info in filteredInfos" :key="info.id" class="hover:bg-gray-100 cursor-pointer"
                             @click="openInfoModal(info)">
-                            <td class="py-2 px-4 border-b">{{ info.assunto }}</td>
-                            <td class="py-2 px-4 border-b">{{ info.categoria }}</td>
-                            <td class="py-2 px-4 border-b">{{ info.descricao }}</td>
-                            <td class="py-2 px-4 border-b">{{ info.data }}</td>
+                            <td class="py-2 px-4 border-b">{{ info.subject }}</td>
+                            <td class="py-2 px-4 border-b">{{ info.category }}</td>
+                            <td class="py-2 px-4 border-b">{{ info.description }}</td>
+                            <td class="py-2 px-4 border-b">{{ formatDate(info.created_at) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -80,8 +52,14 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
 import TheSidebar from '../components/TheSidebar.vue';
 import TheInfoModal from '../components/TheInfoModal.vue';
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+});
 
 export default {
     name: 'TheInfos',
@@ -89,101 +67,88 @@ export default {
         TheSidebar,
         TheInfoModal,
     },
-    data() {
-        return {
-            isSidebarVisible: false,
-            isModalOpen: false,
-            infoToEdit: {
-                assunto: '',
-                categoria: '',
-                descricao: '',
-                data: '',
-            },
-            infos: [
-                { id: 1, assunto: 'Manuseio de Amostras', categoria: 'Higiene', descricao: 'Equipamentos limpos e desinfetados', data: '2023-10-12' },
-                { id: 2, assunto: 'Comportamento Animal', categoria: 'Manejo', descricao: 'Sinais de estresse nos animais', data: '2023-10-15' },
-                { id: 3, assunto: 'Pós Medicação', categoria: 'Manejo', descricao: 'Monitorar resposta após medicamentos', data: '2023-10-20' },
-                { id: 4, assunto: 'Vacinação', categoria: 'Saúde', descricao: 'Manejo antes e após vacinação', data: '2023-10-22' },
-            ],
-            assuntos: ['Manuseio de Amostras', 'Comportamento Animal', 'Pós Medicação', 'Vacinação'],
-            categorias: ['Higiene', 'Manejo', 'Saúde'],
-            showDropdown: {
-                data: false,
-                categoria: false,
-            },
-            selectedAssunto: '',
-            selectedCategoria: null,
-            selectedDateOrder: null,
+    setup() {
+        const isSidebarVisible = ref(false);
+        const isModalOpen = ref(false);
+        const infoToEdit = ref({
+            subject: '',
+            category: '',
+            description: '',
+            created_at: '',
+        });
+        const infos = ref([]);
+
+        const toggleSidebar = () => {
+            isSidebarVisible.value = !isSidebarVisible.value;
         };
-    },
-    computed: {
-        filteredInfos() {
-            let filtered = [...this.infos];
-            if (this.selectedAssunto) {
-                filtered = filtered.filter(info => info.assunto === this.selectedAssunto);
-            }
-            if (this.selectedCategoria) {
-                filtered = filtered.filter(info => info.categoria === this.selectedCategoria);
-            }
-            if (this.selectedDateOrder === 'asc') {
-                filtered.sort((a, b) => new Date(a.data) - new Date(b.data));
-            } else if (this.selectedDateOrder === 'desc') {
-                filtered.sort((a, b) => new Date(b.data) - new Date(a.data));
-            }
-            return filtered;
-        },
-    },
-    methods: {
-        toggleSidebar() {
-            this.isSidebarVisible = !this.isSidebarVisible;
-        },
-        openModal() {
-            this.infoToEdit = {
-                assunto: '',
-                categoria: '',
-                descricao: '',
-                data: '',
-            };
-            this.isModalOpen = true;
-        },
-        closeModal() {
-            this.isModalOpen = false;
-            this.infoToEdit = {
-                assunto: '',
-                categoria: '',
-                descricao: '',
-                data: '',
-            };
-        },
-        openInfoModal(info) {
-            this.infoToEdit = { ...info };
-            this.isModalOpen = true;
-        },
-        saveInfo(updatedInfo) {
-            if (updatedInfo.id) {
-                const index = this.infos.findIndex(info => info.id === updatedInfo.id);
-                if (index !== -1) {
-                    this.$set(this.infos, index, updatedInfo);
+
+        const openModal = () => {
+            infoToEdit.value = { subject: '', category: '', description: '', created_at: '' };
+            isModalOpen.value = true;
+        };
+
+        const closeModal = () => {
+            isModalOpen.value = false;
+            infoToEdit.value = { subject: '', category: '', description: '', created_at: '' };
+        };
+
+        const openInfoModal = (info) => {
+            infoToEdit.value = { ...info, created_at: info.created_at.split('T')[0] };
+            isModalOpen.value = true;
+        };
+
+        const saveInfo = async (updatedInfo) => {
+            try {
+                if (updatedInfo.id) {
+                    await api.put(`/infos/${updatedInfo.id}`, updatedInfo);
+                    const index = infos.value.findIndex((info) => info.id === updatedInfo.id);
+                    if (index !== -1) {
+                        infos.value[index] = updatedInfo;
+                    }
+                } else {
+                    const response = await api.post('/infos', updatedInfo);
+                    infos.value.push(response.data);
                 }
-            } else {
-                updatedInfo.id = this.infos.length + 1;
-                this.infos.push(updatedInfo);
+                closeModal();
+            } catch (error) {
+                console.error('Erro ao salvar informação:', error);
             }
-            this.closeModal();
-        },
-        sortByDate(order) {
-            this.selectedDateOrder = order;
-            this.showDropdown.data = false;
-        },
-        filterByCategoria(categoria) {
-            this.selectedCategoria = categoria;
-            this.showDropdown.categoria = false;
-        },
-        clearFilters() {
-            this.selectedAssunto = '';
-            this.selectedCategoria = null;
-            this.selectedDateOrder = null;
-        },
+            fetchInfos();
+        };
+
+        const fetchInfos = async () => {
+            try {
+                const response = await api.get('/infos');
+                infos.value = response.data;
+            } catch (error) {
+                console.error('Erro ao buscar informações:', error);
+            }
+        };
+
+        const filteredInfos = computed(() => {
+            return infos.value;
+        });
+
+        const formatDate = (date) => {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return new Date(date).toLocaleDateString('pt-BR', options);
+        };
+
+        fetchInfos();
+
+        return {
+            isSidebarVisible,
+            isModalOpen,
+            infoToEdit,
+            infos,
+            filteredInfos,
+            toggleSidebar,
+            openModal,
+            closeModal,
+            openInfoModal,
+            saveInfo,
+            formatDate,
+        };
     },
 };
 </script>

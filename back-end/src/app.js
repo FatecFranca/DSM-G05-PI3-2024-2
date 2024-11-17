@@ -11,6 +11,7 @@ import farmsRouter from './routes/farms.js';
 import ocupationsRouter from './routes/ocupations.js';
 import animalsRouter from './routes/animals.js';
 import alertsRouter from './routes/alerts.js';
+import infosRouter from './routes/infos.js';
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use('/farms', farmsRouter);
 app.use('/ocupations', ocupationsRouter);
 app.use('/api/animals', animalsRouter);
 app.use('/alerts', alertsRouter);
+app.use('/infos', infosRouter);
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use(express.static(path.join(__dirname, 'dist')));

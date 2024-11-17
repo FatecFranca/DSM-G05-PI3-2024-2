@@ -10,26 +10,25 @@
             <form @submit.prevent="submitForm">
                 <div class="mb-4">
                     <label class="block text-gray-700">Assunto</label>
-                    <input v-model="info.assunto" type="text" class="border rounded w-full px-3 py-2" required />
+                    <input v-model="info.subject" type="text" class="border rounded w-full px-3 py-2" required />
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Categoria</label>
-                    <select v-model="info.categoria" class="border rounded w-full px-3 py-2" required>
-                        <option v-for="categoria in categorias" :key="categoria" :value="categoria">{{ categoria }}
-                        </option>
-                    </select>
+                    <input v-model="info.category" type="text" class="border rounded w-full px-3 py-2" required />
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Descrição</label>
-                    <textarea v-model="info.descricao" class="border rounded w-full px-3 py-2" required></textarea>
+                    <textarea v-model="info.description" class="border rounded w-full px-3 py-2" required></textarea>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Data</label>
-                    <input v-model="info.data" type="date" class="border rounded w-full px-3 py-2" required />
+                    <input v-model="info.created_at" type="date" class="border rounded w-full px-3 py-2" disabled />
                 </div>
+
                 <div class="flex justify-end">
-                    <button type="submit"
-                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Salvar</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        Salvar
+                    </button>
                 </div>
             </form>
         </div>
@@ -47,15 +46,11 @@ export default {
         info: {
             type: Object,
             default: () => ({
-                assunto: '',
-                categoria: '',
-                descricao: '',
-                data: '',
+                subject: '',
+                category: '',
+                description: '',
+                created_at: '',
             }),
-        },
-        categorias: {
-            type: Array,
-            required: true,
         },
     },
     methods: {

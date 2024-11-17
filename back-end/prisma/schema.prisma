@@ -87,3 +87,11 @@ model Alert {
   created_at      DateTime  @default(now())
   status_active   Boolean
 }
+
+model Info {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  subject     String
+  category    String
+  description String
+  created_at  DateTime @default(now())
+}
