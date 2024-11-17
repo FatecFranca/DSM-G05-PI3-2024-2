@@ -42,16 +42,25 @@ controller.retrieveOne = async function (req, res) {
 
 controller.update = async function (req, res) {
     try {
-        const result = await prisma.alert.update({
-            where: { id: req.params.id },
-            data: req.body
-        })
+        const { id } = req.params;
+        const { animalId, description, resolution, resolution_date, status_active } = req.body;
 
-        if(result) res.status(204).end()
-        res.status(404).end()
+        const result = await prisma.alert.update({
+            where: { id: id },
+            data: {
+                animalId,
+                description,
+                resolution,
+                resolution_date,
+                status_active,
+            }
+        });
+
+        if (result) res.status(204).end();
+        else res.status(404).end();
     } catch (error) {
-        console.error(error)
-        res.status(500).send(error)
+        console.error(error);
+        res.status(500).send(error);
     }
 }
 

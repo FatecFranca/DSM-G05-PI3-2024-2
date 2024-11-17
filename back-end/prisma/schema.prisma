@@ -79,13 +79,13 @@ model Animal {
 
 model Alert {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  animalId        String    @db.ObjectId
-  animal          Animal    @relation(fields: [animalId], references: [id])
+  animalId        String?   @db.ObjectId
+  animal          Animal?   @relation(fields: [animalId], references: [id])
   description     String
   resolution      String?
   resolution_date DateTime?
   created_at      DateTime  @default(now())
-  status_active   Boolean
+  status_active   Boolean?
 }
 
 model Info {

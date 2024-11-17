@@ -10,7 +10,7 @@
             <form @submit.prevent="submitForm">
                 <div class="mb-4">
                     <label class="block text-gray-700">Alerta</label>
-                    <textarea v-model="alertText" class="border rounded w-full px-3 py-2"
+                    <textarea v-model="alertData.description" class="border rounded w-full px-3 py-2"
                         placeholder="Escreva o alerta aqui..." required></textarea>
                 </div>
                 <div class="flex justify-end">
@@ -30,15 +30,30 @@ export default {
             type: Boolean,
             required: true,
         },
+        alert: {
+            type: Object,
+            default: () => ({
+                description: ''
+            }),
+        },
     },
     data() {
         return {
-            alertText: '',
+            alertData: { ...this.alert },
         };
+    },
+    watch: {
+        alert: {
+            immediate: true,
+            handler(newAlert) {
+                this.alertData = { ...newAlert };
+            },
+        },
     },
     methods: {
         submitForm() {
-            this.$emit('save-alert', this.alertText);
+            this.$emit('save-alert', this.alertData);
+            this.alertData = { description: '' };
         },
     },
 };
