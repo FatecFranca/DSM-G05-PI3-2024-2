@@ -4,6 +4,7 @@ import logger from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import portfinder from 'portfinder';
+import cors from 'cors'; // Importando o middleware CORS
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
@@ -15,6 +16,26 @@ import alertsRouter from './routes/alerts.js';
 import infosRouter from './routes/infos.js';
 
 const app = express();
+
+const allowedOrigins = [
+  'https://dsm-g05-pi3-2024-2.onrender.com', // Frontend na produção
+  'http://localhost:5173', // Frontend em desenvolvimento (caso esteja rodando localmente)
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Se a origem for permitida ou se não houver origem (como em chamadas diretas do backend)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(json());
