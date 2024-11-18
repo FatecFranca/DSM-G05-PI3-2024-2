@@ -228,7 +228,7 @@ export default {
             };
         },
         loadAlerts() {
-            api.get('/alerts')
+            api.get('api/alerts')
                 .then((response) => {
                     this.alerts = response.data;
                 })

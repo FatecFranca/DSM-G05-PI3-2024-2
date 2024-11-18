@@ -4,88 +4,96 @@
         <i class="fa fa-bars fa-2x cursor-pointer p-2 mt-5" aria-hidden="true" @click="toggleSidebar"></i>
 
         <div class="flex-grow -ml-1">
-        <div class='h-56'> <!-- Div Superior -->
-            
-        <div class="justify-items-center mt-4 ">
-            <div class="w-auto  justify-items-center mr-[6em]">
-                <h class='text-[2.0rem] center noto-sans-400'>Informações</h>
-                <hr class='w-[14rem] mt-2 -mb-3 border-black border-1.5'>
-                <p class='mt-6 noto-sans-300'>Selecione o que você deseja cadastrar ou atualizar</p>
+            <div class='h-56'> <!-- Div Superior -->
+
+                <div class="justify-items-center mt-4 ">
+                    <div class="w-auto  justify-items-center mr-[6em]">
+                        <h class='text-[2.0rem] center noto-sans-400'>Informações</h>
+                        <hr class='w-[14rem] mt-2 -mb-3 border-black border-1.5'>
+                        <p class='mt-6 noto-sans-300'>Selecione o que você deseja cadastrar ou atualizar</p>
+                    </div>
+                </div>
+
+                <div class="flex mt-[4.17em] ml-[] noto-sans-700 items-center">
+                    <!-- Div engloba Barra filtros e botao cadastrar -->
+
+                    <!-- Div Barra filtros -->
+                    <div class=" flex items-center bg-zinc-50 rounded-lg border border-gray-300 shadow relative py-1.5">
+                        <!--Div Filtro-->
+
+                        <div class="border-r border-gray-300 px-5 py-3 flex items-center">
+                            <img class="w-5 h-5" src="../assets/imgs/filter.png" alt="Filtro" />
+                        </div>
+
+                        <div class="px-5 py-3 noto-sans-700">
+                            <p class="text-sm">Filtro</p>
+                        </div>
+
+                        <div
+                            class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                            <p class="text-sm noto-sans-700 mr-6">Data</p>
+                            <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        </div>
+
+                        <div
+                            class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                            <p class="text-sm mr-5">Categoria</p>
+                            <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        </div>
+
+                        <div
+                            class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                            <p class="text-sm mr-5">Assunto</p>
+                            <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="border-l border-gray-300 px-5 flex items-center space-x-1 text-red-600 cursor-pointer"
+                            @click="clearFilters">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                            <p class="text-sm noto-sans-700">Limpar Filtro</p>
+                        </div>
+                    </div>
+
+
+                    <!-- Botão -->
+                    <button @click="openModal"
+                        class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm w-56 h-11 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
+                        + CADASTRAR INFORMAÇÃO
+                    </button>
+
+                </div>
             </div>
+
+            <div> <!--Div Inferior-->
+                <div> <!--Div quadro-->
+
+                    <div class="flex-1 overflow-y-auto mt-5">
+                        <table class="w-[97.0%] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+                            <thead class="bg-white border-b-2 rounded-t-lg">
+                                <tr class="rounded-lg">
+                                    <th class="py-2 px-4 text-left text-gray-700">Assunto</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Categoria</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Descrição</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Data</th>
+                                </tr>
+                            </thead>
+                            <tbody class="rounded-b-lg">
+                                <tr v-for="info in filteredInfos" :key="info.id" @click="openInfoModal(info)"
+                                    class="hover:bg-gray-50 cursor-pointer">
+                                    <td class="py-2 px-4 border-b">{{ info.subject }}</td>
+                                    <td class="py-2 px-4 border-b">{{ info.category }}</td>
+                                    <td class="py-2 px-4 border-b">{{ info.description }}</td>
+                                    <td class="py-2 px-4 border-b">{{ formatDate(info.created_at) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <TheInfoModal :isOpen="isModalOpen" :info="infoToEdit" @save-info="saveInfo" @close="closeModal" />
+                </div>
+            </div>
+
         </div>
-
-    <div class="flex mt-[4.17em] ml-[] noto-sans-700 items-center"> <!-- Div engloba Barra filtros e botao cadastrar -->
-        
-        <!-- Div Barra filtros -->
-        <div class=" flex items-center bg-zinc-50 rounded-lg border border-gray-300 shadow relative py-1.5"> <!--Div Filtro-->
-            
-            <div class="border-r border-gray-300 px-5 py-3 flex items-center">
-                <img class="w-5 h-5" src="../assets/imgs/filter.png" alt="Filtro" />
-            </div>
-            
-            <div class="px-5 py-3 noto-sans-700">
-                <p class="text-sm">Filtro</p>
-            </div>
-
-            <div class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                <p class="text-sm noto-sans-700 mr-6">Data</p>
-                <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-            </div>
-
-            <div class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                <p class="text-sm mr-5">Categoria</p>
-                <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-            </div>
-
-            <div class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
-                <p class="text-sm mr-5">Assunto</p>
-                <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
-            </div>
-
-            <div class="border-l border-gray-300 px-5 flex items-center space-x-1 text-red-600 cursor-pointer"
-            @click="clearFilters">
-            <i class="fa fa-refresh" aria-hidden="true"></i>
-            <p class="text-sm noto-sans-700">Limpar Filtro</p>
-            </div>
-        </div>
-
-
-        <!-- Botão -->
-        <button @click="openModal" class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm w-56 h-11 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
-            + CADASTRAR INFORMAÇÃO
-        </button>
-
-    </div>
-    </div>
-    
-    <div> <!--Div Inferior-->
-        <div> <!--Div quadro-->
-            
-            <div class="flex-1 overflow-y-auto mt-5">
-                <table class="w-[97.0%] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg">                    <thead class="bg-white border-b-2 rounded-t-lg">
-                        <tr class="rounded-lg">
-                            <th class="py-2 px-4 text-left text-gray-700">Assunto</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Categoria</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Descrição</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Data</th>
-                        </tr>
-                    </thead>
-                    <tbody class="rounded-b-lg">
-                        <tr v-for="info in filteredInfos" :key="info.id"
-                        @click="openInfoModal(info)" class="hover:bg-gray-50 cursor-pointer">
-                            <td class="py-2 px-4 border-b">{{ info.subject }}</td>
-                            <td class="py-2 px-4 border-b">{{ info.category }}</td>
-                            <td class="py-2 px-4 border-b">{{ info.description }}</td>
-                            <td class="py-2 px-4 border-b">{{ formatDate(info.created_at) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <TheInfoModal :isOpen="isModalOpen" :info="infoToEdit" @save-info="saveInfo" @close="closeModal" />        </div>
-    </div>
-    
-</div> 
     </div>
 </template>
 
@@ -156,7 +164,7 @@ export default {
 
         const fetchInfos = async () => {
             try {
-                const response = await api.get('/infos');
+                const response = await api.get('api/infos');
                 infos.value = response.data;
             } catch (error) {
                 console.error('Erro ao buscar informações:', error);
@@ -198,4 +206,3 @@ export default {
     height: 100vh;
 }
 </style>
-
