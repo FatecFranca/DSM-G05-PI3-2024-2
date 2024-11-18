@@ -1,8 +1,9 @@
 import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import cors from 'cors';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import portfinder from 'portfinder';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
@@ -15,48 +16,40 @@ import infosRouter from './routes/infos.js';
 
 const app = express();
 
-const allowedOrigins = [
-  'https://dsm-g05-pi3-2024-2.onrender.com',
-  'http://localhost:5173'
-];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-app.use(cors(corsOptions));
-
 app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Rotas
 app.use('/api/users', usersRouter);
-app.use('/patches', patchesRouter);
-app.use('/farms', farmsRouter);
-app.use('/ocupations', ocupationsRouter);
+app.use('/api/patches', patchesRouter);
+app.use('/api/farms', farmsRouter);
+app.use('/api/ocupations', ocupationsRouter);
 app.use('/api/animals', animalsRouter);
-app.use('/alerts', alertsRouter);
-app.use('/infos', infosRouter);
+app.use('/api/alerts', alertsRouter);
+app.use('/api/infos', infosRouter);
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+const DEFAULT_PORT = process.env.PORT || 3000;
+portfinder.basePort = DEFAULT_PORT;
+
+portfinder.getPortPromise()
+  .then((port) => {
+    app.listen(port, () => {
+      console.log(`Servidor rodando na porta ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Erro ao encontrar uma porta disponível:', err);
+    process.exit(1);
+  });
 
 export default app;
