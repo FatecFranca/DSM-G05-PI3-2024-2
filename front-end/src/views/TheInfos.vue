@@ -57,7 +57,7 @@
 
                     <!-- Botão -->
                     <button @click="openModal"
-                        class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm w-56 h-11 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
+                        class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm w-56 h-11 hover:bg-teal-700 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
                         + CADASTRAR INFORMAÇÃO
                     </button>
 

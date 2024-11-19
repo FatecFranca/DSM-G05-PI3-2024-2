@@ -82,7 +82,7 @@
                             class="bg-green-600 text-white px-4 py-2 rounded-md">Aplicar</button>
                     </div>
 
-                    <button @click="closeFilterModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                    <button @click="closeFilterModal" class="absolute top-2 right-2 text-gray-600 hover:text-red-600">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>

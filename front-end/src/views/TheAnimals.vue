@@ -1,22 +1,21 @@
 <template>
-    <div class="w-screen h-screen flex">
+    <div class="flex-grow-1 bg-[url('@/assets/imgs/BgColor.png')] flex h-screen bg-cover">        
         <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
-
-        <div class="flex-1 h-full bg-gray-100 flex flex-col">
-            <div class="flex items-center h-20 bg-white shadow relative">
+        <div class="flex-1 h-full bg-white flex flex-col">
+            <div class="flex items-center h-20 bg-white relative">
                 <i class="fa fa-bars fa-lg cursor-pointer p-4" @click="toggleSidebar"></i>
-                <span class="text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">
+                <span class="text-2xl noto-sans-400 absolute left-1/2 transform -translate-x-1/2">
                     Cadastro - Animais
                 </span>
             </div>
 
             <!-- Cabeçalho com Filtro à Esquerda e Cadastrar à Direita -->
-            <div class="flex justify-between items-center p-4 bg-gray-50 shadow">
+            <div class="flex justify-between items-center p-4 bg-white">
                 <!-- Filtro à esquerda -->
                 <div class="flex items-center space-x-4">
                     <input type="text" v-model="searchQuery" placeholder="Filtrar por nome ou brinco"
                         class="p-2 border rounded-lg" />
-                    <button @click="applyFilter" class="bg-blue-500 text-white rounded-lg p-2">
+                    <button @click="applyFilter" class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-2">
                         <i class="fa fa-search"></i> Buscar
                     </button>
                 </div>
@@ -24,17 +23,17 @@
                 <!-- Botão Cadastrar à Direita -->
                 <div class="flex space-x-4">
                     <button @click="openAnimalModal"
-                        class="flex items-center bg-green-500 text-white rounded-lg shadow p-3 font-bold hover:bg-green-600">
-                        <i class="fa fa-plus mr-2"></i>
-                        Cadastrar
+                    class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm font-bold w-56 h-11 hover:bg-teal-700 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
+                    <i class="fa fa-plus mr-2"></i>
+                        CADASTRAR ANIMAL
                     </button>
                 </div>
             </div>
 
             <!-- Tabela de Animais -->
-            <div class="flex-1 overflow-y-auto p-4">
-                <table class="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
-                    <thead class="bg-gray-200">
+            <div class="flex-1 overflow-y-auto mt-5">
+                <table class="w-[97.0%] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+                    <thead class="bg-white border-b-2 rounded-t-lg">
                         <tr>
                             <th class="py-2 px-4 text-left text-gray-700">N° Brinco</th>
                             <th class="py-2 px-4 text-left text-gray-700">Nome</th>
@@ -168,4 +167,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.container_fazenda {
+    background-color: rgba(0, 0, 255, 0.477);
+    width: 100vw;
+    height: 100vh;
+}
+</style>
