@@ -1,6 +1,7 @@
 <template>
     <div class="w-screen h-screen flex">
         <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
+
         <div class="flex-1 h-full bg-gray-100 flex flex-col">
             <div class="flex items-center h-20 bg-white shadow relative">
                 <i class="fa fa-bars fa-lg cursor-pointer p-4" @click="toggleSidebar"></i>
@@ -8,38 +9,54 @@
                     Cadastro - Animais
                 </span>
             </div>
+
+            <!-- Cabeçalho com Filtro à Esquerda e Cadastrar à Direita -->
             <div class="flex justify-between items-center p-4 bg-gray-50 shadow">
-                <button @click="openFilterModal" class="flex items-center bg-white rounded-lg border border-gray-300 shadow p-3 font-bold">
-                    <img class="w-5 h-5 mr-2" src="../assets/imgs/filter.png" alt="Filtro" />
-                    Filtro
-                </button>
-                <TheAnimalModal />
+                <!-- Filtro à esquerda -->
+                <div class="flex items-center space-x-4">
+                    <input type="text" v-model="searchQuery" placeholder="Filtrar por nome ou brinco"
+                        class="p-2 border rounded-lg" />
+                    <button @click="applyFilter" class="bg-blue-500 text-white rounded-lg p-2">
+                        <i class="fa fa-search"></i> Buscar
+                    </button>
+                </div>
+
+                <!-- Botão Cadastrar à Direita -->
+                <div class="flex space-x-4">
+                    <button @click="openAnimalModal"
+                        class="flex items-center bg-green-500 text-white rounded-lg shadow p-3 font-bold hover:bg-green-600">
+                        <i class="fa fa-plus mr-2"></i>
+                        Cadastrar
+                    </button>
+                </div>
             </div>
+
+            <!-- Tabela de Animais -->
             <div class="flex-1 overflow-y-auto p-4">
                 <table class="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
                     <thead class="bg-gray-200">
                         <tr>
-                            <th class="py-2 px-4 text-left text-gray-700">Número Brinco</th>
+                            <th class="py-2 px-4 text-left text-gray-700">N° Brinco</th>
                             <th class="py-2 px-4 text-left text-gray-700">Nome</th>
                             <th class="py-2 px-4 text-left text-gray-700">Lote</th>
                             <th class="py-2 px-4 text-left text-gray-700">Idade</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Última Inseminação</th>
+                            <th class="py-2 px-4 text-left text-gray-700">Inseminação</th>
                             <th class="py-2 px-4 text-left text-gray-700">Sexo</th>
                             <th class="py-2 px-4 text-left text-gray-700">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="animal in filteredAnimals" :key="animal.id" class="hover:bg-gray-100 cursor-pointer"
-                            @click="abrirModal(animal)">
-                            <td class="py-2 px-4 border-b">{{ animal.brinco }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.nome }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.lote }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.idade }} anos</td>
-                            <td class="py-2 px-4 border-b">{{ animal.ultimaInseminacao || 'N/A' }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.sexo }}</td>
+                            @click="openAnimalModal(animal)">
+                            <td class="py-2 px-4 border-b">{{ animal.earring }}</td>
+                            <td class="py-2 px-4 border-b">{{ animal.name_animal }}</td>
+                            <td class="py-2 px-4 border-b">{{ animal.patch.patch_name }}</td>
+                            <td class="py-2 px-4 border-b">{{ calculateAge(animal.birthdate) }} anos</td>
+                            <td class="py-2 px-4 border-b">{{ animal.last_childbirth || 'N/A' }}</td>
+                            <td class="py-2 px-4 border-b">{{ animal.gender }}</td>
                             <td class="py-2 px-4 border-b">
-                                <span :class="animal.ativo ? 'text-green-600' : 'text-red-600'">
-                                    {{ animal.ativo ? 'Ativo' : 'Inativo' }}
+                                <span :class="animal.status_active ? 'text-green-600' : 'text-red-600'">
+                                    {{ animal.status_active ? 'Ativo' : 'Inativo' }}
                                 </span>
                             </td>
                         </tr>
@@ -48,49 +65,22 @@
             </div>
         </div>
 
-        <!-- Modal de Filtro -->
-        <div v-if="isFilterModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-                <h2 class="text-xl font-bold mb-4">Filtros</h2>
-                <div class="mb-4">
-                    <input type="text" v-model="filterBangle" placeholder="Brinco"
-                        class="w-full border border-gray-300 p-3 text-sm rounded" />
-                </div>
-                <div class="mb-4">
-                    <input type="text" v-model="filterBatch" placeholder="Lote"
-                        class="w-full border border-gray-300 p-3 text-sm rounded" />
-                </div>
-                <div class="mb-4">
-                    <label class="font-bold">Sexo:</label>
-                    <select v-model="filterGender" class="w-full border border-gray-300 p-3 text-sm rounded">
-                        <option value="">Todos</option>
-                        <option value="Fêmea">Fêmea</option>
-                        <option value="Macho">Macho</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="font-bold">Status:</label>
-                    <select v-model="selectedStatus" class="w-full border border-gray-300 p-3 text-sm rounded">
-                        <option :value="null">Todos</option>
-                        <option :value="true">Ativo</option>
-                        <option :value="false">Inativo</option>
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button @click="clearFilters" class="bg-gray-200 px-4 py-2 rounded">Limpar Filtro</button>
-                    <button @click="closeFilterModal" class="bg-blue-600 text-white px-4 py-2 rounded">Aplicar</button>
-                </div>
-            </div>
-        </div>
+        <!-- Modal de Cadastro de Animal -->
+        <TheAnimalModal :isModalOpen="isAnimalModalOpen" :animalData="selectedAnimal" :isEditMode="!!selectedAnimal"
+            @close="closeAnimalModal" @save="saveAnimal" />
     </div>
 </template>
 
 <script>
-import TheAnimalModal from '../components/TheAnimalModal.vue';
 import TheSidebar from '../components/TheSidebar.vue';
+import TheAnimalModal from '../components/TheAnimalModal.vue';
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+});
 
 export default {
-    name: 'TheAnimals',
     components: {
         TheSidebar,
         TheAnimalModal,
@@ -98,62 +88,82 @@ export default {
     data() {
         return {
             isSidebarVisible: false,
-            isFilterModalOpen: false,
-            animals: [
-                { id: 1, brinco: 'A123', nome: 'Bela', lote: 'Lote 1', idade: 3, ultimaInseminacao: '2023-07-21', sexo: 'Fêmea', ativo: true },
-                { id: 2, brinco: 'B456', nome: 'Zorro', lote: 'Lote 2', idade: 4, ultimaInseminacao: null, sexo: 'Macho', ativo: false },
-                { id: 3, brinco: 'C789', nome: 'Fiona', lote: 'Lote 1', idade: 2, ultimaInseminacao: '2023-08-15', sexo: 'Fêmea', ativo: true },
-                { id: 4, brinco: 'D101', nome: 'Thor', lote: 'Lote 3', idade: 5, ultimaInseminacao: null, sexo: 'Macho', ativo: true },
-                { id: 5, brinco: 'E112', nome: 'Luna', lote: 'Lote 2', idade: 3, ultimaInseminacao: '2023-06-10', sexo: 'Fêmea', ativo: false },
-            ],
-            showDropdown: {
-                sexo: false,
-                status: false,
-            },
-            filterBangle: '',
-            filterBatch: '',
-            filterGender: null,
-            selectedStatus: null,
+            isAnimalModalOpen: false,
+            selectedAnimal: null,
+            animals: [],
+            searchQuery: '',
         };
     },
     computed: {
         filteredAnimals() {
-            let filtered = [...this.animals];
-            if (this.filterBangle) {
-                filtered = filtered.filter(animal =>
-                    animal.brinco.toLowerCase().includes(this.filterBangle.toLowerCase())
+            return this.animals.filter(animal => {
+                return (
+                    animal.name_animal.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                    animal.earring.includes(this.searchQuery)
                 );
-            }
-            if (this.filterBatch) {
-                filtered = filtered.filter(animal =>
-                    animal.lote.toLowerCase().includes(this.filterBatch.toLowerCase())
-                );
-            }
-            if (this.filterGender) {
-                filtered = filtered.filter(animal => animal.sexo === this.filterGender);
-            }
-            if (this.selectedStatus !== null) {
-                filtered = filtered.filter(animal => animal.ativo === this.selectedStatus);
-            }
-            return filtered;
-        },
+            });
+        }
     },
     methods: {
         toggleSidebar() {
             this.isSidebarVisible = !this.isSidebarVisible;
         },
-        openFilterModal() {
-            this.isFilterModalOpen = true;
+        openAnimalModal(animal = null) {
+            this.selectedAnimal = animal || {
+                name_animal: '',
+                gender: '',
+                race: '',
+                coat: '',
+                species: '',
+                patch: '',
+                status_active: true,
+                earring: '',
+                birthdate: '',
+                last_childbirth: '',
+                weight: '',
+                notes: '',
+            };
+            this.isAnimalModalOpen = true;
         },
-        closeFilterModal() {
-            this.isFilterModalOpen = false;
+        closeAnimalModal() {
+            this.isAnimalModalOpen = false;
+            this.selectedAnimal = null;
         },
-        clearFilters() {
-            this.filterBangle = '';
-            this.filterBatch = '';
-            this.filterGender = null;
-            this.selectedStatus = null;
+        saveAnimal(animal) {
+            if (this.selectedAnimal.id) {
+                api.put(`/api/animals/${this.selectedAnimal.id}`, animal)
+                    .then(() => this.loadAnimals());
+            } else {
+                api.post('/api/animals', animal)
+                    .then(() => this.loadAnimals());
+            }
+            this.closeAnimalModal();
         },
+        loadAnimals() {
+            api.get('/api/animals')
+                .then(response => {
+                    this.animals = response.data;
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar animais:', error);
+                });
+        },
+        calculateAge(birthdate) {
+            const birth = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const month = today.getMonth();
+            if (month < birth.getMonth() || (month === birth.getMonth() && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            return age;
+        },
+        applyFilter() {
+            this.filteredAnimals();
+        },
+    },
+    mounted() {
+        this.loadAnimals();
     },
 };
 </script>

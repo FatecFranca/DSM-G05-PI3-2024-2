@@ -195,7 +195,7 @@ export default {
             };
 
             if (alert.id) {
-                api.put(`/alerts/${alert.id}`, alert)
+                api.put(`api/alerts/${alert.id}`, alert)
                     .then((response) => {
                         const index = this.alerts.findIndex(a => a.id === alert.id);
                         if (index !== -1) {
@@ -208,7 +208,7 @@ export default {
                         console.error('Erro ao atualizar o alerta:', error);
                     });
             } else {
-                api.post('/alerts', alert)
+                api.post('api/alerts', alert)
                     .then((response) => {
                         this.alerts.push(response.data);
                         this.closeModal();

@@ -17,14 +17,17 @@ controller.create = async function (req, res) {
 controller.retrieveAll = async function (req, res) {
     try {
         const result = await prisma.animal.findMany({
-            orderBy: [{ name_animal: 'asc' }]
-        })
-        res.send(result)
+            include: {
+                patch: true,
+            },
+            orderBy: [{ name_animal: 'asc' }],
+        });
+        res.send(result);
     } catch (error) {
-        console.error(error)
-        res.status(500).send(error)
+        console.error(error);
+        res.status(500).send(error);
     }
-}
+};
 
 controller.retrieveOne = async function (req, res) {
     try {
