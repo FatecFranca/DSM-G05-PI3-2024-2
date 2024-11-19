@@ -50,14 +50,14 @@
                 <div class="flex-1 bg-white rounded-lg shadow-md p-4">
                     <h3 class="text-xl font-semibold mb-4">ALERTAS</h3>
                     <div class="flex mb-4">
-                        <button @click="openModal()"
+                        <button @click="openModal"
                             class="bg-blue-200 text-blue-800 px-4 py-1 rounded-full hover:bg-blue-300">Anotar +</button>
                     </div>
                     <div class="space-y-2">
                         <div v-for="alert in alerts" :key="alert.id"
                             class="bg-yellow-100 p-2 rounded-md flex justify-between items-center">
-                            <p>{{ alert.description }}</p>
-                            <i class="fa fa-pencil cursor-pointer" @click="openModal(alert)"></i>
+                            <p>{{ alert.message }}</p>
+                            <i class="fa fa-pencil cursor-pointer"></i>
                         </div>
                     </div>
                 </div>
@@ -72,9 +72,9 @@
                         class="px-4 py-2 rounded-r-md hover:bg-blue-300">Histórico</button>
                 </div>
                 <div class="w-full h-96 bg-gray-100 flex items-center justify-center rounded-md">
-                    <template v-if="activeTab === 'growth'">
-                        <GrowthChart :growthData="growthChartData" />
-                    </template>
+                            <template v-if="activeTab === 'growth'" >
+                                <GrowthChart :growthData="growthChartData" />
+                            </template>
                     <template v-else>
                         <table class="w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-4">
                             <thead class="bg-gray-200">
@@ -103,7 +103,8 @@
                 </div>
             </div>
 
-            <TheModalAlert :isOpen="showAlertModal" :alert="newAlertData" @close="closeModal" @save-alert="saveAlert" />
+            <TheModalAlert :isOpen="showAlertModal" :alert="newAlertData" :categorias="categorias" @close="closeModal"
+                @save-alert="saveAlert" />
         </div>
     </div>
 </template>
@@ -112,11 +113,6 @@
 import TheSidebar from '../components/TheSidebar.vue';
 import TheModalAlert from '../components/TheModalAlert.vue';
 import GrowthChart from '../components/GrowthChart.vue';
-import axios from 'axios';
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-});
 
 export default {
     name: 'AnimalDetails',
@@ -131,10 +127,23 @@ export default {
             isEditing: false,
             showAlertModal: false,
             newAlertData: {
-                description: '',
-                created_at: '',
+                assunto: '',
+                categoria: '',
+                descricao: '',
+                data: '',
             },
-            alerts: [],
+            alerts: [
+                { id: 1, message: 'Vaca amarela pulou a janela e quebrou a canela, agora a mãe dela vai bater nela.' },
+                { id: 2, message: 'Outro alerta importante sobre o animal.' },
+                { id: 3, message: 'Necessita de revisão veterinária. Revisão agendada para o dia 05/11.' },
+                { id: 4, message: 'Vacinação atrasada, precisa ser atualizada até 10/11.' },
+                { id: 5, message: 'Observado comportamento anormal, recomenda-se monitoramento.' },
+                { id: 6, message: 'Controle de pragas necessário na próxima semana.' },
+                { id: 7, message: 'O animal não apresentou ganho de peso nas últimas semanas.' },
+                { id: 8, message: 'Alimentação com baixa qualidade detectada, necessidade de mudança.' },
+                { id: 9, message: 'Revisão de manejo programada para o dia 12/11.' },
+                { id: 10, message: 'Histórico de saúde a ser consultado devido a possíveis doenças.' },
+            ],
             animal: {
                 quality: 'Alta',
                 coatColor: 'Amarela',
@@ -151,12 +160,22 @@ export default {
                 { id: 5, title: 'Chamada de observação', date: '30/10/2024', details: 'Observação regular do animal concluída.' },
             ],
             growthChartData: [
-                { year: new Date(2000, 0, 1), weight: 140, height: 80, circumference: 100, production: 110, nutrition: 170 },
-                { year: new Date(2002, 0, 1), weight: 220, height: 90, circumference: 110, production: 145, nutrition: 195 },
-                { year: new Date(2007, 0, 1), weight: 310, height: 100, circumference: 120, production: 175, nutrition: 215 },
-                { year: new Date(2011, 0, 1), weight: 370, height: 105, circumference: 130, production: 200, nutrition: 230 },
-                { year: new Date(2016, 0, 1), weight: 450, height: 110, circumference: 140, production: 230, nutrition: 250 },
-            ],
+            
+  { year: new Date(2000, 0, 1), weight: 140, height: 80, circumference: 100, production: 110, nutrition: 170 },
+  { year: new Date(2002, 0, 1), weight: 220, height: 90, circumference: 110, production: 145, nutrition: 195 },
+  { year: new Date(2007, 0, 1), weight: 310, height: 100, circumference: 120, production: 175, nutrition: 215 },
+  { year: new Date(2011, 0, 1), weight: 370, height: 105, circumference: 130, production: 200, nutrition: 230 },
+  { year: new Date(2014, 0, 1), weight: 430, height: 110, circumference: 140, production: 225, nutrition: 250 },
+  { year: new Date(2017, 0, 1), weight: 490, height: 115, circumference: 150, production: 250, nutrition: 270 },
+  { year: new Date(2019, 0, 1), weight: 540, height: 120, circumference: 160, production: 275, nutrition: 285 },
+  { year: new Date(2021, 0, 1), weight: 600, height: 125, circumference: 170, production: 300, nutrition: 300 },
+  { year: new Date(2023, 0, 1), weight: 670, height: 130, circumference: 180, production: 325, nutrition: 315 },
+  { year: new Date(2025, 0, 1), weight: 740, height: 135, circumference: 190, production: 350, nutrition: 330 },
+  { year: new Date(2027, 0, 1), weight: 800, height: 140, circumference: 200, production: 375, nutrition: 340 }
+]
+
+
+
         };
     },
     methods: {
@@ -167,84 +186,43 @@ export default {
             this.isEditing = !this.isEditing;
         },
         cancelEdit() {
+            this.animal = { ...this.originalAnimalData };
             this.isEditing = false;
-            this.loadAnimalData();
         },
-        openModal(alert = null) {
+        toggleDetails(id) {
+            this.activeCall = this.activeCall === id ? null : id;
+        },
+        openModal() {
             this.showAlertModal = true;
-            if (alert) {
-                this.newAlertData = { ...alert };
-            } else {
-                this.newAlertData = {
-                    description: '',
-                    created_at: '',
-                };
-            }
         },
         closeModal() {
             this.showAlertModal = false;
-            this.newAlertData = {
-                description: '',
-                created_at: '',
-            };
         },
         saveAlert(alertData) {
-            const alert = {
-                ...alertData,
-                created_at: alertData.created_at || new Date().toISOString()
-            };
-
-            if (alert.id) {
-                api.put(`api/alerts/${alert.id}`, alert)
-                    .then((response) => {
-                        const index = this.alerts.findIndex(a => a.id === alert.id);
-                        if (index !== -1) {
-                            this.alerts[index] = response.data;
-                        }
-                        this.closeModal();
-                        this.loadAlerts();
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao atualizar o alerta:', error);
-                    });
-            } else {
-                api.post('api/alerts', alert)
-                    .then((response) => {
-                        this.alerts.push(response.data);
-                        this.closeModal();
-                        this.loadAlerts();
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao salvar o alerta:', error);
-                    });
-            }
-        },
-        loadAnimalData() {
-            this.animal = {
-                quality: 'Alta',
-                coatColor: 'Amarela',
-                colorStatus: 'Normal',
-                length: 'Longo',
-            };
-        },
-        loadAlerts() {
-            api.get('api/alerts')
-                .then((response) => {
-                    this.alerts = response.data;
-                })
-                .catch((error) => {
-                    console.error('Erro ao carregar alertas', error);
-                });
-        },
-        toggleDetails(callId) {
-            this.activeCall = this.activeCall === callId ? null : callId;
-        },
-    },
-    mounted() {
-        this.loadAnimalData();
-        this.loadAlerts();
-    },
+            this.alerts.push({
+                id: this.alerts.length + 1,
+                message: `${alertData.assunto} - ${alertData.descricao}`,
+            });
+            this.closeModal();
+        },fetchGrowthData() {
+      // Simulando fetch
+      this.growthChartData = [
+        { year: new Date(2000, 0, 1), weight: 140, height: 80, circumference: 100 },
+        // Outros dados...
+      ];
+    }, mounted() {
+    this.fetchGrowthData();
+  },
+}
 };
+
 </script>
 
-<style scoped></style>
+<style scoped>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+</style>
