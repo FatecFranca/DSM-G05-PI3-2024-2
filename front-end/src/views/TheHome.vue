@@ -1,9 +1,9 @@
 <template>
-  <div class="w-screen h-screen flex overflow-hidden">
+  <div class="w-screen h-screen flex overflow-hidden bg-gray-100 bg-cover">
     <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
 
-    <div class="flex-1 h-full bg-gray-100 overflow-auto">
-      <div class="flex items-center h-[85px] bg-red-50 relative">
+    <div class="flex-1 h-full  overflow-auto">
+      <div class="flex items-center h-[85px]  relative">
         <i class="fa fa-bars fa-2x cursor-pointer p-2" aria-hidden="true" @click="toggleSidebar"></i>
         <span class="mt-[25px] mb-[35px] text-4xl font-bold absolute left-1/2 transform -translate-x-1/2">
           {{ nomeFazenda }}

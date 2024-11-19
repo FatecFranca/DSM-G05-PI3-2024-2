@@ -1,72 +1,109 @@
 <template>
-    <div class="flex-grow-1 bg-[url('@/assets/imgs/BgColor.png')] flex h-screen bg-cover">        
+    <div class="flex-grow-1 bg-gray-100 flex h-screen bg-cover">
         <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
-        <div class="flex-1 h-full bg-white flex flex-col">
-            <div class="flex items-center h-20 bg-white relative">
-                <i class="fa fa-bars fa-lg cursor-pointer p-4" @click="toggleSidebar"></i>
-                <span class="text-2xl noto-sans-400 absolute left-1/2 transform -translate-x-1/2">
-                    Cadastro - Animais
-                </span>
-            </div>
+        <i class="fa fa-bars fa-2x cursor-pointer p-2 mt-5" aria-hidden="true" @click="toggleSidebar"></i>
 
-            <!-- Cabeçalho com Filtro à Esquerda e Cadastrar à Direita -->
-            <div class="flex justify-between items-center p-4 bg-white">
-                <!-- Filtro à esquerda -->
-                <div class="flex items-center space-x-4">
-                    <input type="text" v-model="searchQuery" placeholder="Filtrar por nome ou brinco"
-                        class="p-2 border rounded-lg" />
-                    <button @click="applyFilter" class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-2">
-                        <i class="fa fa-search"></i> Buscar
-                    </button>
+        <div class="flex-grow -ml-1">
+            <div class='h-56'> <!-- Div Superior -->
+
+                <div class="justify-items-center mt-4 ">
+                    <div class="w-auto  justify-items-center mr-[6em]">
+                        <h class='text-[2.0rem] center noto-sans-400'>Animais</h>
+                        <hr class='w-[14rem] mt-2 -mb-3 border-black border-1.5'>
+                        <p class='mt-6 noto-sans-300'>Selecione o que você deseja cadastrar ou atualizar</p>
+                    </div>
                 </div>
 
-                <!-- Botão Cadastrar à Direita -->
-                <div class="flex space-x-4">
+                <div class="flex mt-[4.17em] ml-[] noto-sans-700 items-center">
+                    <!-- Div engloba Barra filtros e botao cadastrar -->
+
+                    <div class=" flex items-center bg-zinc-50 rounded-lg border border-gray-300 shadow relative py-1.5">
+                        <!--Div Filtro-->
+
+                        <div class="border-r border-gray-300 px-5 py-3 flex items-center">
+                            <img class="w-5 h-5" src="../assets/imgs/filter.png" alt="Filtro" />
+                        </div>
+
+                        <div class="px-5 py-3 noto-sans-700">
+                            <p class="text-sm">Filtro</p>
+                        </div>
+
+                        <div
+                            class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                            <p class="text-sm noto-sans-700 mr-6">Data</p>
+                            <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        </div>
+
+                        <div
+                            class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                            <p class="text-sm noto-sans-700 mr-6">Ordenar Por</p>
+                            <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        </div>
+
+                        <div
+                            class="border-l border-r border-gray-300 px-5 py-3 flex items-center space-x-1 text-gray-800 cursor-pointer relative">
+                            <p class="text-sm noto-sans-700 mr-6">Status</p>
+                            <i class="fa fa-chevron-down mb-1" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="border-l border-gray-300 px-5 flex items-center space-x-1 text-red-600 cursor-pointer"
+                            @click="clearFilters">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                            <p class="text-sm noto-sans-700">Limpar Filtro</p>
+                        </div>
+                    </div>
+
+
+                    <!-- Botão -->
                     <button @click="openAnimalModal"
-                    class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm font-bold w-56 h-11 hover:bg-teal-700 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
-                    <i class="fa fa-plus mr-2"></i>
-                        CADASTRAR ANIMAL
+                        class="noto-san-700 bg-teal-600 bg-opacity-50 text-sm hover:bg-teal-700 w-56 h-11 rounded-lg mt-[0.650rem] text-white ml-auto mr-[2.85em]">
+                        + CADASTRAR ANIMAL
                     </button>
+
                 </div>
             </div>
 
-            <!-- Tabela de Animais -->
-            <div class="flex-1 overflow-y-auto mt-5">
-                <table class="w-[97.0%] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg">
-                    <thead class="bg-white border-b-2 rounded-t-lg">
-                        <tr>
-                            <th class="py-2 px-4 text-left text-gray-700">N° Brinco</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Nome</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Lote</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Idade</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Inseminação</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Sexo</th>
-                            <th class="py-2 px-4 text-left text-gray-700">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="animal in filteredAnimals" :key="animal.id" class="hover:bg-gray-100 cursor-pointer"
-                            @click="openAnimalModal(animal)">
-                            <td class="py-2 px-4 border-b">{{ animal.earring }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.name_animal }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.patch.patch_name }}</td>
-                            <td class="py-2 px-4 border-b">{{ calculateAge(animal.birthdate) }} anos</td>
-                            <td class="py-2 px-4 border-b">{{ animal.last_childbirth || 'N/A' }}</td>
-                            <td class="py-2 px-4 border-b">{{ animal.gender }}</td>
-                            <td class="py-2 px-4 border-b">
-                                <span :class="animal.status_active ? 'text-green-600' : 'text-red-600'">
-                                    {{ animal.status_active ? 'Ativo' : 'Inativo' }}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            <div> <!--Div Inferior-->
+                <div> <!--Div quadro-->
 
-        <!-- Modal de Cadastro de Animal -->
-        <TheAnimalModal :isModalOpen="isAnimalModalOpen" :animalData="selectedAnimal" :isEditMode="!!selectedAnimal"
-            @close="closeAnimalModal" @save="saveAnimal" />
+                    <div class="flex-1 overflow-y-auto mt-5">
+                        <table class="w-[97.0%] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+                            <thead class="bg-white border-b-2 rounded-t-lg">
+                                <tr>
+                                    <th class="py-2 px-4 text-left text-gray-700">N° Brinco</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Nome</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Lote</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Idade</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Inseminação</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Sexo</th>
+                                    <th class="py-2 px-4 text-left text-gray-700">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="animal in filteredAnimals" :key="animal.id"
+                                    class="hover:bg-gray-100 cursor-pointer" @click="openAnimalModal(animal)">
+                                    <td class="py-2 px-4 border-b">{{ animal.earring }}</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.name_animal }}</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.patch.patch_name }}</td>
+                                    <td class="py-2 px-4 border-b">{{ calculateAge(animal.birthdate) }} anos</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.last_childbirth || 'N/A' }}</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.gender }}</td>
+                                    <td class="py-2 px-4 border-b">
+                                        <span :class="animal.status_active ? 'text-green-600' : 'text-red-600'">
+                                            {{ animal.status_active ? 'Ativo' : 'Inativo' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <TheAnimalModal :isModalOpen="isAnimalModalOpen" :animalData="selectedAnimal" :isEditMode="!!selectedAnimal"
+                    @close="closeAnimalModal" @save="saveAnimal" />
+                </div>
+            </div>
+
+        </div>
     </div>
 </template>
 
@@ -138,6 +175,7 @@ export default {
             }
             this.closeAnimalModal();
         },
+        
         loadAnimals() {
             api.get('/api/animals')
                 .then(response => {

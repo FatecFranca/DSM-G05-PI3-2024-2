@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-grow-1 bg-[url('@/assets/imgs/BgColor.png')] flex h-screen bg-cover">
+    <div class="flex-grow-1 bg-gray-100 flex h-screen bg-cover">
         <TheSidebar :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar" />
         <i class="fa fa-bars fa-2x cursor-pointer p-2 mt-5" aria-hidden="true" @click="toggleSidebar"></i>
 
@@ -8,7 +8,7 @@
 
                 <div class="justify-items-center mt-4 ">
                     <div class="w-auto  justify-items-center mr-[6em]">
-                        <h class='text-[2.0rem] center noto-sans-400'>Fazendas</h>
+                        <h1 class='text-[2.0rem] center noto-sans-400'>Fazendas</h1>
                         <hr class='w-[14rem] mt-2 -mb-3 border-black border-1.5'>
                         <p class='mt-6 noto-sans-300'>Selecione o que você deseja cadastrar ou atualizar</p>
                     </div>
