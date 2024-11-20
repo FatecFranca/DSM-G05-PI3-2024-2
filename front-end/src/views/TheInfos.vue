@@ -146,13 +146,13 @@ export default {
         const saveInfo = async (updatedInfo) => {
             try {
                 if (updatedInfo.id) {
-                    await api.put(`/infos/${updatedInfo.id}`, updatedInfo);
+                    await api.put(`/api/infos/${updatedInfo.id}`, updatedInfo);
                     const index = infos.value.findIndex((info) => info.id === updatedInfo.id);
                     if (index !== -1) {
                         infos.value[index] = updatedInfo;
                     }
                 } else {
-                    const response = await api.post('/infos', updatedInfo);
+                    const response = await api.post('/api/infos', updatedInfo);
                     infos.value.push(response.data);
                 }
                 closeModal();

@@ -81,13 +81,14 @@
                             </thead>
                             <tbody>
                                 <tr v-for="animal in filteredAnimals" :key="animal.id"
-                                    class="hover:bg-gray-100 cursor-pointer" @click="openAnimalModal(animal)">
-                                    <td class="py-2 px-4 border-b">{{ animal.earring }}</td>
-                                    <td class="py-2 px-4 border-b">{{ animal.name_animal }}</td>
-                                    <td class="py-2 px-4 border-b">{{ animal.patch.patch_name }}</td>
-                                    <td class="py-2 px-4 border-b">{{ calculateAge(animal.birthdate) }} anos</td>
+                                    class="hover:bg-gray-100 cursor-pointer">
+                                    <td class="py-2 px-4 border-b">{{ animal.earring || '' }}</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.name_animal || '' }}</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.patch?.patch_name || '' }}</td>
+                                    <td class="py-2 px-4 border-b">{{ calculateAge(animal.birthdate) || 'N/A' }} anos
+                                    </td>
                                     <td class="py-2 px-4 border-b">{{ animal.last_childbirth || 'N/A' }}</td>
-                                    <td class="py-2 px-4 border-b">{{ animal.gender }}</td>
+                                    <td class="py-2 px-4 border-b">{{ animal.gender || '' }}</td>
                                     <td class="py-2 px-4 border-b">
                                         <span :class="animal.status_active ? 'text-green-600' : 'text-red-600'">
                                             {{ animal.status_active ? 'Ativo' : 'Inativo' }}
@@ -98,8 +99,8 @@
                         </table>
                     </div>
 
-                <TheAnimalModal :isModalOpen="isAnimalModalOpen" :animalData="selectedAnimal" :isEditMode="!!selectedAnimal"
-                    @close="closeAnimalModal" @save="saveAnimal" />
+                    <TheAnimalModal :isModalOpen="isAnimalModalOpen" :animalData="selectedAnimal"
+                        :isEditMode="!!selectedAnimal" @close="closeAnimalModal" @save="saveAnimal" />
                 </div>
             </div>
 
@@ -147,17 +148,12 @@ export default {
         openAnimalModal(animal = null) {
             this.selectedAnimal = animal || {
                 name_animal: '',
-                gender: '',
-                race: '',
-                coat: '',
+                animal_breed: '',
                 species: '',
-                patch: '',
                 status_active: true,
                 earring: '',
                 birthdate: '',
                 last_childbirth: '',
-                weight: '',
-                notes: '',
             };
             this.isAnimalModalOpen = true;
         },
@@ -175,7 +171,7 @@ export default {
             }
             this.closeAnimalModal();
         },
-        
+
         loadAnimals() {
             api.get('/api/animals')
                 .then(response => {

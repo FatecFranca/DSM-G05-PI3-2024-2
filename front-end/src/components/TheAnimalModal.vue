@@ -14,7 +14,8 @@
           <div class="w-full md:w-1/2 space-y-3">
             <div>
               <label for="name" class="block font-semibold">Nome</label>
-              <input type="text" id="name" v-model="animal.name" required class="w-full p-0.5 border rounded-lg" />
+              <input type="text" id="name" v-model="animal.name_animal" required
+                class="w-full p-0.5 border rounded-lg" />
             </div>
             <div>
               <label for="sexo" class="block font-semibold">Sexo</label>
@@ -26,19 +27,8 @@
             </div>
             <div>
               <label for="raca" class="block font-semibold">Raça</label>
-              <input type="text" id="raca" v-model="animal.race" required class="w-full p-0.5 border rounded-lg" />
-            </div>
-            <div>
-              <label for="pelagem" class="block font-semibold">Pelagem</label>
-              <input type="text" id="pelagem" v-model="animal.coat" required class="w-full p-0.5 border rounded-lg" />
-            </div>
-            <div>
-              <label for="especie" class="block font-semibold">Espécie</label>
-              <input type="text" id="especie" v-model="animal.species" required class="w-full p-0.5 border rounded-lg" />
-            </div>
-            <div>
-              <label for="lote" class="block font-semibold">Lote</label>
-              <input type="text" id="lote" v-model="animal.batch" required class="w-full p-0.5 border rounded-lg" />
+              <input type="text" id="raca" v-model="animal.animal_breed" required
+                class="w-full p-0.5 border rounded-lg" />
             </div>
             <label class="font-semibold">Status</label>
             <div class="flex">
@@ -54,20 +44,7 @@
           <div class="w-full md:w-1/2 space-y-3">
             <div>
               <label for="chip" class="block font-semibold">Nº do chip</label>
-              <input type="text" id="chip" v-model="animal.chip" required class="w-full p-0.5 border rounded-lg" />
-            </div>
-            <div>
-              <label for="dataNascimento" class="block font-semibold">Data de Nascimento</label>
-              <input type="date" id="dataNascimento" v-model="animal.birthdate" required
-                class="w-full p-0.5 border rounded-lg" />
-            </div>
-            <div>
-              <label for="dataParto" class="block font-semibold">Data do Último Parto</label>
-              <input type="date" id="dataParto" v-model="animal.last_childbirth" class="w-full p-0.5 border rounded-lg" />
-            </div>
-            <div>
-              <label for="peso" class="block font-semibold">Peso</label>
-              <input type="text" id="peso" v-model="animal.weight" required class="w-full p-0.5 border rounded-lg" />
+              <input type="text" id="chip" v-model="animal.earring" required class="w-full p-0.5 border rounded-lg" />
             </div>
             <div>
               <label for="imagem" class="block font-semibold">Imagem</label>
@@ -78,13 +55,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="mt-4">
-          <label for="observacoes" class="block font-semibold">Observações</label>
-          <textarea id="observacoes" v-model="animal.notes"
-            placeholder="Digite informações adicionais sobre o animal..."
-            class="w-full p-0.5 border rounded-lg h-32"></textarea>
-        </div> -->
 
         <div class="flex justify-end mt-4">
           <button
@@ -115,19 +85,12 @@ export default {
   data() {
     return {
       animal: {
-        name: "",
+        name_animal: "",
         gender: "",
-        race: "",
-        coat: "",
-        species: "",
-        batch: "",
-        status: null,
-        chip: "",
-        birthdate: "",
-        last_childbirth: "",
-        weight: "",
-        notes: "",
-        image: null,
+        animal_breed: "",
+        status_active: null,
+        earring: "",
+        img_animal: null,
         ...this.animalData,
       },
     };
@@ -137,7 +100,7 @@ export default {
       this.$emit("close");
     },
     toggleStatus(status) {
-      this.animal.status = this.animal.status === status ? null : status;
+      this.animal.status_active = this.animal.status_active === status ? null : status;
     },
     handleImageUpload(event) {
       this.animal.image = event.target.files[0];

@@ -61,19 +61,19 @@ model Animal {
   earring         String
   name_animal     String
   img_animal      String?
-  collar          String
-  gender          String
-  patchId         String    @db.ObjectId
-  patch           Patch     @relation(fields: [patchId], references: [id])
-  birthdate       DateTime
+  collar          String?
+  gender          String?
+  patchId         String?   @db.ObjectId
+  patch           Patch?    @relation(fields: [patchId], references: [id])
+  birthdate       DateTime?
   last_childbirth DateTime?
-  pregnant        Boolean
+  pregnant        Boolean?
   animal_breed    String
   name_father     String?
   name_mother     String?
   birth_weight    String?
   created_at      DateTime  @default(now())
-  status_active   Boolean
+  status_active   Boolean?
   alerts          Alert[]
 }
 

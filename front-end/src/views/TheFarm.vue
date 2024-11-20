@@ -153,8 +153,8 @@ export default {
             }
 
             const request = fazenda.id
-                ? api.put(`/farms/${fazenda.id}`, fazenda)
-                : api.post('/farms', fazenda);
+                ? api.put(`/api/farms/${fazenda.id}`, fazenda)
+                : api.post('/api/farms', fazenda);
 
             request.then(() => {
                 this.fetchFazendas();
