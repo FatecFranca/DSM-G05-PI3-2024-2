@@ -16,7 +16,7 @@
                     <i class="fa fa-search text-gray-500 p-3"></i>
                 </div>
                 <button @click="openFilter"
-                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center">
+                    class="bg-teal-600 text-white font-bold px-4 py-2 rounded hover:bg-teal-700 flex items-center">
                     <i class="fa fa-filter mr-2"></i> Filtro
                 </button>
             </div>

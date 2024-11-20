@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isModalOpen" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div class="bg-white p-8 rounded-lg-lg w-full max-w-5xl relative h-[90%]">
+      <div class="bg-white p-8 rounded-lg w-full max-w-5xl relative h-[90%]">
         <span class="absolute top-4 right-4 text-3xl text-gray-600 cursor-pointer hover:text-red-600"
           @click="closeModal">&times;</span>
 
@@ -43,10 +43,10 @@
             <label class="font-semibold">Status</label>
             <div class="flex">
               <button :class="{ 'bg-green-300': animal.status === 'vivo', 'bg-white': animal.status !== 'vivo' }"
-                class="w-24 p-0.5 border border-gray-300 rounded-lg-l-lg hover:bg-gray-200"
+                class="w-24 p-0.5 border border-gray-300 rounded-l-lg hover:bg-gray-200"
                 @click="toggleStatus('vivo')">Vivo</button>
               <button :class="{ 'bg-red-300': animal.status === 'obito', 'bg-white': animal.status !== 'obito' }"
-                class="w-24 p-0.5 border border-gray-300 rounded-lg-r-lg hover:bg-gray-200"
+                class="w-24 p-0.5 border border-gray-300 rounded-r-lg hover:bg-gray-200"
                 @click="toggleStatus('obito')">Óbito</button>
             </div>
           </div>
@@ -88,7 +88,7 @@
 
         <div class="flex justify-end mt-4">
           <button
-            class="bg-teal-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-yellow-600 transform hover:scale-105"
+            class="bg-teal-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-teal-700 transform hover:scale-105"
             @click="saveAnimal">{{ isEditMode ? "SALVAR ALTERAÇÕES" : "REGISTRAR" }}</button>
         </div>
       </div>
